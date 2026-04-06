@@ -40,16 +40,3 @@ This creates the production bundle in dist.
 
 - data/nodes.csv
 - data/edges.csv
-
-## Stop Tracking node_modules and dist in Git
-
-If node_modules or dist were committed before adding them to .gitignore, run:
-
-git rm -r --cached node_modules dist
-git add .gitignore README.md
-git commit -m "Add README and stop tracking build/dependency folders"
-git push
-
-Notes:
-- This removes those folders from Git tracking only.
-- Your local files are not deleted.
