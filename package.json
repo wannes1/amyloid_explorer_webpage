@@ -1,0 +1,24 @@
+{
+  "name": "amyloids-interface",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "esbuild index.tsx --bundle --loader:.module.css=local-css --loader:.css=css --jsx=automatic --target=es2020 --platform=browser --outdir=dist --servedir=. --sourcemap --log-level=info --alias:@/cosmograph=./cosmograph --serve=8000",
+    "build": "esbuild index.tsx --bundle --loader:.module.css=local-css --loader:.css=css --jsx=automatic --target=es2020 --platform=browser --outdir=dist --sourcemap --log-level=info --alias:@/cosmograph=./cosmograph"
+  },
+  "dependencies": {
+    "@cosmograph/react": "2.1.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "d3-scale": "4.0.2",
+    "d3-scale-chromatic": "3.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "18.2.48",
+    "@types/react-dom": "18.2.18",
+    "typescript": "5.4.5",
+    "esbuild": "0.27.4"
+  }
+}
+
+

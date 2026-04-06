@@ -1,0 +1,498 @@
+id,cluster_thermodynamics,cluster_color_thermodynamics,cluster,cluster_color,Protein,cluster_seq,cluster_color_seq
+9dmz,10,#e3e55b,33.0,#5bdfe5,Prion Protein,24.0,#66e55b
+9dmy,10,#e3e55b,33.0,#5bdfe5,Prion Protein,24.0,#66e55b
+7qvc,5,#e5a15b,6.0,#e5a85b,TMEM106B,8.0,#e5b35b
+7qvf,5,#e5a15b,6.0,#e5a85b,TMEM106B,8.0,#e5b35b
+7x83,5,#e5a15b,6.0,#e5a85b,TMEM106B,11.0,#e5d45b
+8x5h,5,#e5a15b,6.0,#e5a85b,TMEM106B,11.0,#e5d45b
+7saq,5,#e5a15b,6.0,#e5a85b,TMEM106B,8.0,#e5b35b
+7sar,5,#e5a15b,6.0,#e5a85b,TMEM106B,8.0,#e5b35b
+6vha,4,#e5935b,8.0,#e5c15b,,6.0,#e59d5b
+6vh7,4,#e5935b,8.0,#e5c15b,,6.0,#e59d5b
+7sas,5,#e5a15b,6.0,#e5a85b,TMEM106B,8.0,#e5b35b
+8j7p,5,#e5a15b,6.0,#e5a85b,TMEM106B,11.0,#e5d45b
+8otd,5,#e5a15b,6.0,#e5a85b,TMEM106B,8.0,#e5b35b
+8j7n,5,#e5a15b,6.0,#e5a85b,TMEM106B,11.0,#e5d45b
+7u12,5,#e5a15b,6.0,#e5a85b,TMEM106B,8.0,#e5b35b
+7u13,5,#e5a15b,6.0,#e5a85b,TMEM106B,8.0,#e5b35b
+7u10,5,#e5a15b,6.0,#e5a85b,TMEM106B,8.0,#e5b35b
+7u11,5,#e5a15b,6.0,#e5a85b,TMEM106B,8.0,#e5b35b
+9fnb,5,#e5a15b,6.0,#e5a85b,TMEM106B,8.0,#e5b35b
+7p6a,4,#e5935b,11.0,#e3e55b,Tau 4R,6.0,#e59d5b
+7p6b,4,#e5935b,11.0,#e3e55b,Tau 4R,6.0,#e59d5b
+7p6c,4,#e5935b,11.0,#e3e55b,Tau 4R,6.0,#e59d5b
+7qwm,5,#e5a15b,6.0,#e5a85b,TMEM106B,11.0,#e5d45b
+8ote,5,#e5a15b,6.0,#e5a85b,TMEM106B,8.0,#e5b35b
+8q8f,0,#e55b5b,4.0,#e58e5b,Tau(297-391),0.0,#e55b5b
+8q8d,0,#e55b5b,0.0,#e55b5b,Tau(297-391),0.0,#e55b5b
+7qwl,5,#e5a15b,6.0,#e5a85b,TMEM106B,8.0,#e5b35b
+7qwg,5,#e5a15b,6.0,#e5a85b,TMEM106B,8.0,#e5b35b
+7upf,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+7upe,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+7nrs,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+7nrt,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8q8x,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+8q27,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+6tjo,4,#e5935b,8.0,#e5c15b,Tau 4R,6.0,#e59d5b
+6tjx,4,#e5935b,8.0,#e5c15b,Tau 4R,6.0,#e59d5b
+7p68,4,#e5935b,11.0,#e3e55b,Tau 4R,6.0,#e59d5b
+7p67,4,#e5935b,11.0,#e3e55b,Tau 4R,6.0,#e59d5b
+9faa,16,#8fe55b,23.0,#5be56c,"Light Chain λ3, Antibody",19.0,#9de55b
+9fab,16,#8fe55b,23.0,#5be56c,"Light Chain λ3, Antibody",19.0,#9de55b
+7u0z,4,#e5935b,11.0,#e3e55b,Tau 4R,29.0,#5be587
+7p65,4,#e5935b,11.0,#e3e55b,Tau 4R,29.0,#5be587
+8q2j,0,#e55b5b,0.0,#e55b5b,Tau(297-391),0.0,#e55b5b
+8q9a,0,#e55b5b,0.0,#e55b5b,Tau(297-391),0.0,#e55b5b
+7x84,5,#e5a15b,6.0,#e5a85b,TMEM106B,8.0,#e5b35b
+9erm,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8ot6,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8caq,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+6nwp,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8q98,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+8q2k,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+9fac,16,#8fe55b,23.0,#5be56c,"Light Chain λ3, Antibody",19.0,#9de55b
+8orf,4,#e5935b,8.0,#e5c15b,Tau 4R,6.0,#e59d5b
+8org,4,#e5935b,8.0,#e5c15b,Tau 4R,6.0,#e59d5b
+8q9h,0,#e55b5b,0.0,#e55b5b,Tau(297-391),0.0,#e55b5b
+7qkx,0,#e55b5b,0.0,#e55b5b,Tau (266-391)(297-391),0.0,#e55b5b
+8q9m,0,#e55b5b,0.0,#e55b5b,Tau(297-391),0.0,#e55b5b
+6sst,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+6ssx,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8q9l,0,#e55b5b,0.0,#e55b5b,Tau(297-391),0.0,#e55b5b
+7ql4,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+7qjv,0,#e55b5b,4.0,#e58e5b,Tau,0.0,#e55b5b
+8q9j,0,#e55b5b,0.0,#e55b5b,Tau(297-391),0.0,#e55b5b
+7ynm,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7ynn,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+8q9g,0,#e55b5b,0.0,#e55b5b,Tau(297-391),0.0,#e55b5b
+8a7o,11,#d5e55b,8.0,#e5c15b,β-2-microglobulin ΔN6 mutation,15.0,#c9e55b
+8a7p,11,#d5e55b,8.0,#e5c15b,β-2-microglobulin ΔN6 mutation,15.0,#c9e55b
+8cyt,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8cz3,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+7ynq,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7yno,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+8q9o,0,#e55b5b,0.0,#e55b5b,Tau(297-391),0.0,#e55b5b
+8ads,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8a4l,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8otg,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+7p66,4,#e5935b,11.0,#e3e55b,Tau 4R,6.0,#e59d5b
+7qk1,0,#e55b5b,0.0,#e55b5b,Tau (297-394),0.0,#e55b5b
+7qku,0,#e55b5b,0.0,#e55b5b,Tau (266-391)(297-391),0.0,#e55b5b
+8byn,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8hzs,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7v4d,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+8q8m,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8q8y,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+8q7l,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+7r4t,0,#e55b5b,4.0,#e58e5b,Tau (266-391)+(297-391),4.0,#e5875b
+7qkl,0,#e55b5b,4.0,#e58e5b,Tau (266-391)(297-391),4.0,#e5875b
+8uq7,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8q8r,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+9hbb,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8pkf,6,#e5af5b,7.0,#e5b45b,,7.0,#e5a85b
+8pkg,6,#e5af5b,7.0,#e5b45b,,7.0,#e5a85b
+9ern,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8qcr,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+8q8w,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+8q8c,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+8x7p,7,#e5bd5b,9.0,#e5ce5b,α-synuclein,1.0,#e5665b
+8x7b,7,#e5bd5b,9.0,#e5ce5b,α-synuclein,1.0,#e5665b
+8x7o,7,#e5bd5b,9.0,#e5ce5b,α-synuclein,1.0,#e5665b
+8x7l,7,#e5bd5b,9.0,#e5ce5b,α-synuclein,1.0,#e5665b
+7td6,10,#e3e55b,14.0,#bde55b,Prion Protein,10.0,#e5c95b
+7qig,10,#e3e55b,14.0,#bde55b,Prion Protein,10.0,#e5c95b
+8x7q,7,#e5bd5b,9.0,#e5ce5b,α-synuclein,1.0,#e5665b
+8q9d,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+8q9b,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+8zlo,7,#e5bd5b,9.0,#e5ce5b,α-synuclein,1.0,#e5665b
+8x7m,7,#e5bd5b,9.0,#e5ce5b,α-synuclein,1.0,#e5665b
+8x7r,7,#e5bd5b,9.0,#e5ce5b,α-synuclein,1.0,#e5665b
+8pke,6,#e5af5b,7.0,#e5b45b,,7.0,#e5a85b
+8q9i,0,#e55b5b,0.0,#e55b5b,Tau(297-391),0.0,#e55b5b
+8q7m,0,#e55b5b,4.0,#e58e5b,Tau(297-391),0.0,#e55b5b
+8rrr,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+6rt0,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8oti,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8q7f,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+8q8z,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+8q9c,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+8q7t,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+8gbr,6,#e5af5b,7.0,#e5b45b,Transthyretin,7.0,#e5a85b
+8tdn,6,#e5af5b,7.0,#e5b45b,"Transthyretin, I84S",7.0,#e5a85b
+7qki,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8q8s,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8cz1,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8cz0,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8qcp,0,#e55b5b,0.0,#e55b5b,Tau(297-391),0.0,#e55b5b
+9ero,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8cyr,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8cys,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+7qjw,0,#e55b5b,0.0,#e55b5b,Tau (297-391),0.0,#e55b5b
+8qjj,0,#e55b5b,0.0,#e55b5b,Tau(297-391),0.0,#e55b5b
+6sdz,6,#e5af5b,7.0,#e5b45b,"Transthyretin, V30M",7.0,#e5a85b
+8q9f,0,#e55b5b,0.0,#e55b5b,Tau(297-391),0.0,#e55b5b
+7ql0,0,#e55b5b,0.0,#e55b5b,Tau (266-391)(297-391),0.0,#e55b5b
+7mkg,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8sei,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+7nci,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+7nch,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8cyy,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+7v48,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8h04,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8a00,10,#e3e55b,14.0,#bde55b,Prion Protein,10.0,#e5c95b
+9bxo,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+9cda,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+6xyo,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+8q7p,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+8tdo,6,#e5af5b,7.0,#e5b45b,"Transthyretin, I84S",7.0,#e5a85b
+9h5j,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+9h5g,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8ade,6,#e5af5b,7.0,#e5b45b,Transthyretin,7.0,#e5a85b
+6z1i,14,#abe55b,16.0,#a3e55b,"Light Chain λ3, Antibody",28.0,#5be57c
+6z1o,14,#abe55b,16.0,#a3e55b,"Light Chain λ3, Antibody",28.0,#5be57c
+8q2l,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+8q99,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+8q97,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+7qkv,0,#e55b5b,0.0,#e55b5b,Tau (266-391)(297-391),0.0,#e55b5b
+8zx6,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8zwl,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8a7t,11,#d5e55b,8.0,#e5c15b,β-2-microglobulin D76N mutation,15.0,#c9e55b
+8pk4,9,#e5d95b,22.0,#5be560,α-synuclein,3.0,#e57c5b
+8zlp,9,#e5d95b,22.0,#5be560,α-synuclein,3.0,#e57c5b
+9eoh,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8cyx,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+7nrq,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+7nrv,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+7qk5,0,#e55b5b,0.0,#e55b5b,Tau (266-391)(297-391),0.0,#e55b5b
+8bgs,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8e7h,6,#e5af5b,7.0,#e5b45b,Transthyretin,7.0,#e5a85b
+9cd9,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+6xyq,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7qk2,0,#e55b5b,4.0,#e58e5b,Tau (300-391),4.0,#e5875b
+7ql1,0,#e55b5b,0.0,#e55b5b,Tau (266-391),0.0,#e55b5b
+8q8e,0,#e55b5b,4.0,#e58e5b,Tau(297-391),0.0,#e55b5b
+9eog,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+7xo3,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8h03,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8q8u,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+9bxi,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+7qkj,0,#e55b5b,4.0,#e58e5b,Tau (266-391)(297-391),4.0,#e5875b
+7xo2,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+7xo1,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+7qjy,0,#e55b5b,4.0,#e58e5b,Tau (266-391)(297-391),4.0,#e5875b
+8ot9,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+9cgz,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+9cgx,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8ore,0,#e55b5b,0.0,#e55b5b,Tau 3R,0.0,#e55b5b
+7ql3,0,#e55b5b,4.0,#e58e5b,Tau (266-391)(297-391),4.0,#e5875b
+8pjo,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+6ufr,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8cpe,18,#73e55b,30.0,#5be5c5,"Light Chain λ6, Antibody",30.0,#5be592
+6hud,18,#73e55b,30.0,#5be5c5,"Light Chain λ6, Antibody",30.0,#5be592
+7r5h,0,#e55b5b,4.0,#e58e5b,Tau (266-391)(297-391),4.0,#e5875b
+9bxr,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8cyw,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8seh,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+9bxq,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8otc,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8oth,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+7ovt,12,#c7e55b,17.0,#97e55b,"Serum Amyloid A, mouse",9.0,#e5be5b
+6zch,12,#c7e55b,17.0,#97e55b,"Serum Amyloid A, mouse",9.0,#e5be5b
+8q9e,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+8e7d,6,#e5af5b,7.0,#e5b45b,Transthyretin,7.0,#e5a85b
+6dso,12,#c7e55b,17.0,#97e55b,"Serum Amyloid A, mouse",9.0,#e5be5b
+8cyv,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+7mkf,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8cax,0,#e55b5b,0.0,#e55b5b,Tau 4R,0.0,#e55b5b
+8cz6,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+7nrx,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8g9r,6,#e5af5b,7.0,#e5b45b,Transthyretin,7.0,#e5a85b
+9bbl,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+7mkh,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8q8v,0,#e55b5b,4.0,#e58e5b,Tau(297-391),4.0,#e5875b
+8q8l,0,#e55b5b,0.0,#e55b5b,Tau(297-391),0.0,#e55b5b
+7qkk,0,#e55b5b,0.0,#e55b5b,Tau (258-391),0.0,#e55b5b
+8ihu,19,#65e55b,32.0,#5be5df,Superoxide Dismutase,26.0,#5be566
+8ihv,19,#65e55b,32.0,#5be5df,Superoxide Dismutase,26.0,#5be566
+7ynr,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7wmm,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7qjx,0,#e55b5b,4.0,#e58e5b,Tau (297-391),0.0,#e55b5b
+8pix,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8ec7,13,#b9e55b,21.0,#64e55b,hnRNPA2,18.0,#a8e55b
+8duw,13,#b9e55b,21.0,#64e55b,hnRNPA2,18.0,#a8e55b
+6xyp,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+9bbm,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+7xo0,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8zwh,7,#e5bd5b,9.0,#e5ce5b,α-synuclein,1.0,#e5665b
+8adw,9,#e5d95b,20.0,#70e55b,α-synuclein,3.0,#e57c5b
+8adv,9,#e5d95b,20.0,#70e55b,α-synuclein,3.0,#e57c5b
+7ncj,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+7ncg,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+7yns,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+8cz2,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+9ijp,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+8zwj,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+8bfa,2,#e5775b,3.0,#e5815b,Amyloid-β(1-42) E22G,2.0,#e5715b
+8bfb,2,#e5775b,3.0,#e5815b,Amyloid-β(1-42) E22G,2.0,#e5715b
+8q88,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8a7q,11,#d5e55b,55.0,#e55bda,β-2-microglobulin,15.0,#c9e55b
+6hre,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+7ob4,6,#e5af5b,7.0,#e5b45b,"Transthyretin, V30M",7.0,#e5a85b
+6hrf,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+7wo0,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8zwi,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7ynp,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7qkg,8,#e5cb5b,13.0,#c9e55b,Tau (258-391),6.0,#e59d5b
+7qk6,8,#e5cb5b,13.0,#c9e55b,Tau (258-391),6.0,#e59d5b
+7v4a,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+7v4b,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8bgv,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+7ynf,1,#e5695b,1.0,#e5685b,,1.0,#e5665b
+7yng,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7upg,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+5o3o,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8otj,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+9gg1,4,#e5935b,,,,4.0,#e5875b
+9fyp,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8du2,13,#b9e55b,21.0,#64e55b,hnRNPA2,18.0,#a8e55b
+8q9k,0,#e55b5b,0.0,#e55b5b,Tau(297-391),0.0,#e55b5b
+7p6d,4,#e5935b,8.0,#e5c15b,Tau 4R,6.0,#e59d5b
+6l4s,7,#e5bd5b,9.0,#e5ce5b,α-synuclein,1.0,#e5665b
+8zwm,0,#e55b5b,4.0,#e58e5b,Tau,4.0,#e5875b
+7p6e,4,#e5935b,8.0,#e5c15b,Tau 4R,6.0,#e59d5b
+8zwk,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7nca,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+7qjz,0,#e55b5b,0.0,#e55b5b,Tau (266-391)(297-391),0.0,#e55b5b
+7yk8,1,#e5695b,52.0,#c95be5,α-synuclein,1.0,#e5665b
+7ymn,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8owd,2,#e5775b,15.0,#b0e55b,Amyloid-β,2.0,#e5715b
+8owk,2,#e5775b,15.0,#b0e55b,Amyloid-β,2.0,#e5715b
+6ti6,2,#e5775b,5.0,#e59b5b,,2.0,#e5715b
+6ti7,2,#e5775b,5.0,#e59b5b,,2.0,#e5715b
+7yk2,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+8e7j,6,#e5af5b,7.0,#e5b45b,"Transthyretin, I84S",7.0,#e5a85b
+8e7e,6,#e5af5b,7.0,#e5b45b,"Transthyretin, I84S",7.0,#e5a85b
+8adu,9,#e5d95b,20.0,#70e55b,α-synuclein,3.0,#e57c5b
+8aex,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+6nwq,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8hzc,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+8hzb,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7q4b,2,#e5775b,3.0,#e5815b,Amyloid-β,2.0,#e5715b
+8kf4,2,#e5775b,3.0,#e5815b,Amyloid-β,2.0,#e5715b
+8e7i,6,#e5af5b,7.0,#e5b45b,"Transthyretin, P24S",7.0,#e5a85b
+7xjx,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+9gg0,4,#e5935b,34.0,#5bd2e5,Tau P301L mutation,22.0,#7ce55b
+9ewv,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8ol6,2,#e5775b,3.0,#e5815b,Amyloid-β,2.0,#e5715b
+8ol2,2,#e5775b,3.0,#e5815b,Amyloid-β(1-42),2.0,#e5715b
+7v47,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+5o3l,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+5o3t,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+7ozg,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+7ynl,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7ynt,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+8qxa,17,#81e55b,3.0,#e5815b,TDP-43,17.0,#b3e55b
+8qxb,17,#81e55b,3.0,#e5815b,TDP-43,17.0,#b3e55b
+8efu,10,#e3e55b,14.0,#bde55b,Prion Protein,10.0,#e5c95b
+8bqv,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+8azu,0,#e55b5b,0.0,#e55b5b,Tau,0.0,#e55b5b
+8cg3,20,#5be560,28.0,#5be5ac,TDP-43,27.0,#5be571
+8cgh,20,#5be560,28.0,#5be5ac,TDP-43,27.0,#5be571
+8uie,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8sej,2,#e5775b,3.0,#e5815b,Amyloid-β,2.0,#e5715b
+6zcf,21,#5be56e,25.0,#5be586,"Serum Amyloid A, mouse",9.0,#e5be5b
+6zcg,21,#5be56e,46.0,#7d5be5,"Serum Amyloid A, mouse",9.0,#e5be5b
+6peo,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7nck,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7umq,22,#5be57c,18.0,#8ae55b,Prion Protein,25.0,#5be55b
+7un5,22,#5be57c,18.0,#8ae55b,Prion Protein,25.0,#5be55b
+8az3,3,#e5855b,5.0,#e59b5b,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+8az5,3,#e5855b,5.0,#e59b5b,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+8pk2,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+8az2,3,#e5855b,5.0,#e59b5b,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+8kew,2,#e5775b,3.0,#e5815b,Amyloid-β,2.0,#e5715b
+7q4m,2,#e5775b,3.0,#e5815b,"Amyloid-β(1-42), human",2.0,#e5715b
+8ol5,2,#e5775b,3.0,#e5815b,Amyloid-β(1-42),2.0,#e5715b
+8kf3,2,#e5775b,3.0,#e5815b,Amyloid-β,2.0,#e5715b
+8az0,3,#e5855b,5.0,#e59b5b,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+8az4,3,#e5855b,5.0,#e59b5b,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+8qx9,17,#81e55b,3.0,#e5815b,TDP-43,17.0,#b3e55b
+8kf5,2,#e5775b,3.0,#e5815b,Amyloid-β,2.0,#e5715b
+8kf1,2,#e5775b,3.0,#e5815b,Amyloid-β,2.0,#e5715b
+8ovm,2,#e5775b,15.0,#b0e55b,Amyloid-β,2.0,#e5715b
+8owj,2,#e5775b,15.0,#b0e55b,Amyloid-β,2.0,#e5715b
+8q92,4,#e5935b,,,,21.0,#87e55b
+9gg6,4,#e5935b,34.0,#5bd2e5,Tau P301T mutation,6.0,#e59d5b
+7wnz,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7v49,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+8h05,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+8az6,3,#e5855b,27.0,#5be59f,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+9euu,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7lna,10,#e3e55b,14.0,#bde55b,Prion Protein,10.0,#e5c95b
+6vhl,15,#9de55b,0.0,#e55b5b,,0.0,#e55b5b
+7qkw,8,#e5cb5b,13.0,#c9e55b,Tau (266-391) S356D,6.0,#e59d5b
+8bfz,2,#e5775b,3.0,#e5815b,Amyloid-β,2.0,#e5715b
+8bg0,2,#e5775b,3.0,#e5815b,Amyloid-β,2.0,#e5715b
+6zrr,3,#e5855b,5.0,#e59b5b,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+6zrq,3,#e5855b,5.0,#e59b5b,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+6osl,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+6vi3,15,#9de55b,0.0,#e55b5b,,0.0,#e55b5b
+6osj,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+8qn7,2,#e5775b,12.0,#d6e55b,Amyloid-β(1-40),2.0,#e5715b
+8qn6,2,#e5775b,12.0,#d6e55b,Amyloid-β(1-40),2.0,#e5715b
+6cu7,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+6gx5,4,#e5935b,,,,,
+8ot4,2,#e5775b,12.0,#d6e55b,Amyloid-β,2.0,#e5715b
+8ff2,2,#e5775b,12.0,#d6e55b,,2.0,#e5715b
+8az1,3,#e5855b,5.0,#e59b5b,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+6pes,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+8otf,2,#e5775b,3.0,#e5815b,Amyloid-β,2.0,#e5715b
+8kf6,2,#e5775b,3.0,#e5815b,Amyloid-β,2.0,#e5715b
+8ceb,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+8ot1,2,#e5775b,10.0,#e5da5b,Amyloid-β,2.0,#e5715b
+8ot3,2,#e5775b,10.0,#e5da5b,Amyloid-β,2.0,#e5715b
+8az7,3,#e5855b,27.0,#5be59f,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+8ri9,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7qk3,8,#e5cb5b,13.0,#c9e55b,Tau (258-391),6.0,#e59d5b
+2lmo,2,#e5775b,5.0,#e59b5b,,2.0,#e5715b
+2lmq,2,#e5775b,5.0,#e59b5b,,2.0,#e5715b
+6h6b,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7yl3,3,#e5855b,19.0,#7de55b,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+7yl0,3,#e5855b,19.0,#7de55b,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+8ttn,4,#e5935b,,,,0.0,#e55b5b
+8a9l,1,#e5695b,26.0,#5be592,α-synuclein,13.0,#dfe55b
+7ozh,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+8azt,2,#e5775b,3.0,#e5815b,Amyloid-β(1-42),2.0,#e5715b
+8wcp,8,#e5cb5b,2.0,#e5755b,Tau,0.0,#e55b5b
+8q96,8,#e5cb5b,,,,20.0,#92e55b
+8ovk,2,#e5775b,10.0,#e5da5b,Amyloid-β,2.0,#e5715b
+6r4r,0,#e55b5b,44.0,#645be5,SH3 Domain of PI3-kinase,37.0,#5be5df
+8ol7,2,#e5775b,3.0,#e5815b,Amyloid-β,2.0,#e5715b
+8owe,2,#e5775b,15.0,#b0e55b,Amyloid-β,2.0,#e5715b
+7v4c,1,#e5695b,,,,3.0,#e57c5b
+6gk3,11,#d5e55b,8.0,#e5c15b,β-2-microglobulin,50.0,#5b5be5
+2lmp,2,#e5775b,24.0,#5be579,,2.0,#e5715b
+2lmn,2,#e5775b,24.0,#5be579,,2.0,#e5715b
+5kk3,2,#e5775b,3.0,#e5815b,,2.0,#e5715b
+6flt,1,#e5695b,1.0,#e5685b,,1.0,#e5665b
+8qpz,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+6ti5,2,#e5775b,5.0,#e59b5b,,2.0,#e5715b
+8uka,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7ql2,8,#e5cb5b,13.0,#c9e55b,Tau (244-391),21.0,#87e55b
+8ol3,2,#e5775b,3.0,#e5815b,Amyloid-β(1-42),2.0,#e5715b
+6rtb,1,#e5695b,2.0,#e5755b,α-synuclein,3.0,#e57c5b
+6osm,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+6l1t,1,#e5695b,,,,13.0,#dfe55b
+7uak,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+6qjm,2,#e5775b,5.0,#e59b5b,Tau 4R,52.0,#715be5
+6qjp,2,#e5775b,5.0,#e59b5b,Tau 4R,4.0,#e5875b
+8awt,3,#e5855b,5.0,#e59b5b,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+8oqi,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7yl7,3,#e5855b,19.0,#7de55b,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+8dja,2,#e5775b,31.0,#5be5d2,Prion Protein,16.0,#bee55b
+7rl4,2,#e5775b,31.0,#5be5d2,Prion Protein,16.0,#bee55b
+6w0o,2,#e5775b,10.0,#e5da5b,Amyloid-β(1-40),2.0,#e5715b
+8olo,2,#e5775b,3.0,#e5815b,Amyloid-β(1-42),2.0,#e5715b
+7f29,2,#e5775b,3.0,#e5815b,Amyloid-β(1-42),2.0,#e5715b
+8sel,2,#e5775b,63.0,#e55b75,Amyloid-β,2.0,#e5715b
+6qjh,8,#e5cb5b,8.0,#e5c15b,Tau 4R,20.0,#92e55b
+7qkm,8,#e5cb5b,2.0,#e5755b,Tau (266-391) S356D,20.0,#92e55b
+8sek,2,#e5775b,3.0,#e5815b,Amyloid-β,2.0,#e5715b
+6l1u,9,#e5d95b,39.0,#5b92e5,α-synuclein,13.0,#dfe55b
+9eme,14,#abe55b,16.0,#a3e55b,"Light Chain λ3, Antibody",59.0,#be5be5
+2mxu,2,#e5775b,3.0,#e5815b,,2.0,#e5715b
+8eze,2,#e5775b,57.0,#e55bc1,Amyloid-β(1-42),2.0,#e5715b
+8jex,1,#e5695b,60.0,#e55b9b,,49.0,#5b66e5
+8j47,2,#e5775b,10.0,#e5da5b,Amyloid-β,2.0,#e5715b
+8ezd,2,#e5775b,56.0,#e55bce,Amyloid-β(1-42),2.0,#e5715b
+7ykw,3,#e5855b,,,,5.0,#e5925b
+8ce7,1,#e5695b,,,,1.0,#e5665b
+8rqm,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+2mvx,2,#e5775b,36.0,#5bb9e5,,2.0,#e5715b
+7q66,2,#e5775b,5.0,#e59b5b,Nup98,12.0,#e5df5b
+7q64,2,#e5775b,,,,12.0,#e5df5b
+8ff3,2,#e5775b,10.0,#e5da5b,,2.0,#e5715b
+7m61,3,#e5855b,5.0,#e59b5b,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+6y1a,3,#e5855b,5.0,#e59b5b,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+2m4j,2,#e5775b,35.0,#5bc5e5,,2.0,#e5715b
+8r4i,3,#e5855b,5.0,#e59b5b,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+7e0f,7,#e5bd5b,9.0,#e5ce5b,α-synuclein,1.0,#e5665b
+7ypg,0,#e55b5b,53.0,#d65be5,Tau (297-391),22.0,#7ce55b
+8bg9,2,#e5775b,3.0,#e5815b,Amyloid-β,2.0,#e5715b
+5oqv,2,#e5775b,3.0,#e5815b,Amyloid-β(1-42),2.0,#e5715b
+6n3c,2,#e5775b,42.0,#5b6ce5,TDP-43,51.0,#665be5
+7m64,3,#e5855b,5.0,#e59b5b,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+8r3t,8,#e5cb5b,,,,21.0,#87e55b
+2mpz,2,#e5775b,5.0,#e59b5b,,2.0,#e5715b
+7m65,3,#e5855b,3.0,#e5815b,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+7m62,3,#e5855b,48.0,#975be5,Islet Amyloid Polypeptide (IAPP),60.0,#c95be5
+8oln,2,#e5775b,3.0,#e5815b,Amyloid-β,2.0,#e5715b
+8olg,2,#e5775b,3.0,#e5815b,Amyloid-β,2.0,#e5715b
+6qjq,3,#e5855b,,,,0.0,#e55b5b
+8ttl,3,#e5855b,10.0,#e5da5b,Tau,0.0,#e55b5b
+7qkf,0,#e55b5b,,,,4.0,#e5875b
+8olq,2,#e5775b,3.0,#e5815b,Amyloid-β,41.0,#5bbee5
+6cu8,1,#e5695b,38.0,#5b9fe5,α-synuclein,1.0,#e5665b
+6wqk,13,#b9e55b,,,,70.0,#e55b92
+6vw2,3,#e5855b,45.0,#705be5,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+8qv8,0,#e55b5b,,,,56.0,#9d5be5
+6zrf,3,#e5855b,5.0,#e59b5b,Islet Amyloid Polypeptide (IAPP),5.0,#e5925b
+6lrq,1,#e5695b,1.0,#e5685b,α-synuclein,1.0,#e5665b
+7q65,2,#e5775b,,,,12.0,#e5df5b
+2beg,2,#e5775b,5.0,#e59b5b,,35.0,#5be5c9
+6n3b,3,#e5855b,5.0,#e59b5b,TDP-43,14.0,#d4e55b
+6n37,3,#e5855b,5.0,#e59b5b,TDP-43,14.0,#d4e55b
+7zky,12,#c7e55b,12.0,#d6e55b,"Serum Amyloid A, human",9.0,#e5be5b
+7dac,23,#5be58a,,,,46.0,#5b87e5
+6vps,23,#5be58a,5.0,#e59b5b,Orb2,36.0,#5be5d4
+8gf7,9,#e5d95b,58.0,#e55bb4,α-synuclein,42.0,#5bb3e5
+8ci8,3,#e5855b,29.0,#5be5b9,Nup98,33.0,#5be5b3
+6shs,2,#e5775b,12.0,#d6e55b,Amyloid-β,2.0,#e5715b
+8r47,14,#abe55b,,,,69.0,#e55b9d
+7qkh,3,#e5855b,10.0,#e5da5b,Tau (258-391),31.0,#5be59d
+2m5n,24,#5be598,,,,62.0,#df5be5
+7qkz,24,#5be598,50.0,#b05be5,Tau (305-379),6.0,#e59d5b
+2lnq,2,#e5775b,,,,2.0,#e5715b
+6uur,3,#e5855b,5.0,#e59b5b,Prion Protein,65.0,#e55bc9
+6n3a,3,#e5855b,29.0,#5be5b9,TDP-43,14.0,#d4e55b
+8fpt,15,#9de55b,26.0,#5be592,,67.0,#e55bb3
+8v1n,3,#e5855b,64.0,#e55b68,Tau,53.0,#7c5be5
+9c1u,3,#e5855b,5.0,#e59b5b,,38.0,#5bdfe5
+6tub,2,#e5775b,,,,72.0,#e55b7c
+7q67,2,#e5775b,3.0,#e5815b,Nup98,12.0,#e5df5b
+8hia,2,#e5775b,59.0,#e55ba8,"Transforming Growth Factor Beta Induced Protein, TGFBIp(611-633), G623R",39.0,#5bd4e5
+2nnt,2,#e5775b,5.0,#e59b5b,,73.0,#e55b71
+7zh7,25,#5be5a6,54.0,#e35be5,"Serum Amyloid A, feline",47.0,#5b7ce5
+8zmy,26,#5be5b4,22.0,#5be560,α-synuclein,3.0,#e57c5b
+6xfm,27,#5be5c2,5.0,#e59b5b,FUS,40.0,#5bc9e5
+7c1d,28,#5be5d0,9.0,#e5ce5b,α-synuclein,1.0,#e5665b
+7lc9,29,#5be5de,25.0,#5be586,α-synuclein,13.0,#dfe55b
+6jpd,30,#5bdee5,,,,57.0,#a85be5
+8g2v,31,#5bd0e5,,,,34.0,#5be5be
+7bx7,32,#5bc2e5,47.0,#8a5be5,hnRNPA1,55.0,#925be5
+7dwv,33,#5bb4e5,5.0,#e59b5b,Prion Protein,61.0,#d45be5
+7yat,34,#5ba6e5,5.0,#e59b5b,Prion Protein,16.0,#bee55b
+2e8d,35,#5b98e5,,,,68.0,#e55ba8
+2nao,36,#5b8ae5,37.0,#5bace5,,2.0,#e5715b
+7da4,37,#5b7ce5,,,,,
+6nzn,38,#5b6ee5,43.0,#5b60e5,,43.0,#5ba8e5
+6lni,39,#5b60e5,40.0,#5b86e5,Prion Protein,10.0,#e5c95b
+9for,40,#655be5,5.0,#e59b5b,TDP-43 and Annexin A11 cofibril,14.0,#d4e55b
+8oq5,41,#735be5,18.0,#8ae55b,Apolipoprotein A-II,64.0,#e55bd4
+7sp1,42,#815be5,51.0,#bd5be5,Tau40 and RNA,23.0,#71e55b
+6mst,43,#8f5be5,41.0,#5b79e5,"Serum Amyloid A, human",9.0,#e5be5b
+8ppo,44,#9d5be5,62.0,#e55b81,Tau,6.0,#e59d5b
+8jey,45,#ab5be5,61.0,#e55b8e,,44.0,#5b9de5
+7l7h,46,#b95be5,3.0,#e5815b,α-synuclein,3.0,#e57c5b
+8spa,47,#c75be5,13.0,#c9e55b,CPEB3,54.0,#875be5
+6ic3,48,#d55be5,16.0,#a3e55b,"Light Chain λ1, Antibody",58.0,#b35be5
+7py2,49,#e35be5,,,,63.0,#e55bdf
+5w3n,50,#e55bd9,2.0,#e5755b,,66.0,#e55bbe
+2n0a,51,#e55bcb,,,,1.0,#e5665b
+7qky,52,#e55bbd,49.0,#a35be5,Tau 0N4R with phosphoserine,23.0,#71e55b
+8qut,53,#e55baf,,,,74.0,#e55b66
+8bqw,54,#e55ba1,,,,,
+7vqq,55,#e55b93,7.0,#e5b45b,FUS,45.0,#5b92e5
+8ons,56,#e55b85,,,,71.0,#e55b87
+7kwz,57,#e55b77,,,,32.0,#5be5a8
+7vzf,58,#e55b69,,,,48.0,#5b71e5
