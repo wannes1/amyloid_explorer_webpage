@@ -235,8 +235,8 @@ export const component = (): React.JSX.Element => {
 
     try {
       const [nodesRes, edgesRes] = await Promise.all([
-        fetch('/data/thermodynamics_nodes_merged_with_description.csv'),
-        fetch('/data/thermodynamics_edges.csv'),
+        fetch('data/thermodynamics_nodes_merged_with_description.csv'),
+        fetch('data/thermodynamics_edges.csv'),
       ])
 
       if (!nodesRes.ok || !edgesRes.ok) {
@@ -809,7 +809,7 @@ export const component = (): React.JSX.Element => {
 
   const selectedThermodynamicsImageUrl = useMemo(() => {
     if (!selectedThermodynamicsImageName) return null
-    return `/data/${selectedThermodynamicsImageName}`
+    return `data/${selectedThermodynamicsImageName}`
   }, [selectedThermodynamicsImageName])
 
   const openThermodynamicsClusterModal = useCallback(() => {
@@ -1021,7 +1021,7 @@ export const component = (): React.JSX.Element => {
       }
     }
 
-    const nodeFileUrl = `/data/stamp_b_factor_residue_pdbs_corrected/${encodeURIComponent(selectedId)}.pdb`
+    const nodeFileUrl = `data/stamp_b_factor_residue_pdbs_corrected/${encodeURIComponent(selectedId)}.pdb`
 
     const loadStructure = async () => {
       setIsProteinLoading(true)
@@ -1773,7 +1773,7 @@ export const component = (): React.JSX.Element => {
                 ) : (
                   <p className={s.clusterPreviewMessage}>
                     {selectedThermodynamicsImageName
-                      ? `No dendrogram image found. Expected /data/${selectedThermodynamicsImageName}.`
+                      ? `No dendrogram image found. Expected data/${selectedThermodynamicsImageName}.`
                       : 'Select a node with a valid thermodynamics cluster value.'}
                   </p>
                 )}
