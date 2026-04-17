@@ -4,6 +4,9 @@ import {
   CosmographProvider,
   Cosmograph,
   CosmographRef,
+  CosmographSearch,
+  CosmographSearchRef,
+  CosmographTypeColorLegend,
 } from '@cosmograph/react'
 import s from './style.module.css'
 
@@ -18,12 +21,10 @@ type GraphPoint = {
   id: string
   idx: number
   cluster_thermodynamics: number
-  cluster_seq: number
   cluster: number
   Protein?: string
   cluster_color_thermodynamics?: string
   cluster_color?: string
-  cluster_color_seq?: string
   node_size: number
 }
 
@@ -47,11 +48,35 @@ type PointColorOption = {
   description: string
 }
 
+type TypeLegendState = {
+  show: boolean
+  label: string
+  sortBy?: string
+}
+
+type PointColorConfig = {
+  pointColorBy: string
+  pointColorStrategy?:
+    | 'map'
+    | 'categorical'
+    | 'continuous'
+    | 'direct'
+    | 'degree'
+    | 'preciseDegree'
+    | 'linkDirection'
+    | 'single'
+  pointColorByMap?: Record<string, string>
+}
+
 type PanelView = 'graph' | 'filters' | 'info'
 type GraphConfigView = 'points' | 'links'
 
 const MOLSTAR_TARGET_ID = 'molstar-viewer-root'
 const TEST_SELECTED_NODE_URL = 'https://amyloid-explorer.switchlab.org/database/Abeta42?strct=8KEW'
+const initialSuggestionFields: Record<string, string> = {
+  id: 'PDB Code',
+  Protein: 'Protein',
+}
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const component = (): React.JSX.Element => {
@@ -67,20 +92,26 @@ export const component = (): React.JSX.Element => {
   const [pointLabelByKey, setPointLabelByKey] = useState('Protein')
   const [showPointLabels, setShowPointLabels] = useState(true)
   const [showLinks, setShowLinks] = useState(true)
-  const [edgeWidthScale, setEdgeWidthScale] = useState(1)
+  const [edgeWidthScale, setEdgeWidthScale] = useState(0.1)
   const [isProteinLoading, setIsProteinLoading] = useState(false)
   const [proteinError, setProteinError] = useState<string | null>(null)
   const [loadedProteinLabel, setLoadedProteinLabel] = useState('No node selected')
   const [isMolstarReady, setIsMolstarReady] = useState(false)
   const [isMolstarExpanded, setIsMolstarExpanded] = useState(false)
   const [proteinColorByBFactor, setProteinColorByBFactor] = useState(true)
+  const [proteinEnergyDomain, setProteinEnergyDomain] = useState<[number, number] | null>(null)
   const [proteinFilter, setProteinFilter] = useState('all')
   const [clusterFilter, setClusterFilter] = useState('all')
-  const [clusterSeqFilter, setClusterSeqFilter] = useState('all')
+  const [structuralClusterFilter, setStructuralClusterFilter] = useState('all')
+  const [expMethodFilter, setExpMethodFilter] = useState('all')
+  const [diseaseFilter, setDiseaseFilter] = useState('all')
   const [isClusterModalOpen, setIsClusterModalOpen] = useState(false)
+  const [isClusterImageExpanded, setIsClusterImageExpanded] = useState(false)
   const [clusterImageHasError, setClusterImageHasError] = useState(false)
 
   const cosmograph = useRef<CosmographRef | null>(null)
+  const search = useRef<CosmographSearchRef>(undefined)
+  const searchOverlayRef = useRef<HTMLDivElement | null>(null)
   const molstarViewerRef = useRef<MolstarViewerInstance | null>(null)
 
   const buildColorOptions = useCallback((sample: CsvRow): PointColorOption[] => {
@@ -91,48 +122,23 @@ export const component = (): React.JSX.Element => {
         options.push(option)
       }
     }
-
     addOption({
-      key: 'cluster_thermodynamics',
+      key: 'cluster_color_thermodynamics',
       label: 'Thermodynamics cluster',
-      strategy: 'continuous',
-      description: 'Continuous gradient using cluster_thermodynamics values.',
+      strategy: 'direct',
+      description: 'Use hex colors directly from cluster_color_thermodynamics.',
     })
     addOption({
-      key: 'cluster_seq',
-      label: 'Sequence cluster',
-      strategy: 'continuous',
-      description: 'Continuous gradient using cluster_seq values.',
-    })
-    addOption({
-      key: 'cluster',
-      label: 'Cluster',
-      strategy: 'categorical',
-      description: 'Categorical palette assigning discrete colors per cluster value.',
+      key: 'cluster_color',
+      label: 'Structural cluster',
+      strategy: 'direct',
+      description: 'Use hex colors directly from cluster_color.',
     })
     addOption({
       key: 'Protein',
       label: 'Protein',
       strategy: 'categorical',
       description: 'Categorical palette assigning a distinct color to each protein.',
-    })
-    addOption({
-      key: 'cluster_color',
-      label: 'Cluster color field',
-      strategy: 'direct',
-      description: 'Use hex colors directly from cluster_color.',
-    })
-    addOption({
-      key: 'cluster_color_thermodynamics',
-      label: 'Thermodynamics color field',
-      strategy: 'direct',
-      description: 'Use hex colors directly from cluster_color_thermodynamics.',
-    })
-    addOption({
-      key: 'cluster_color_seq',
-      label: 'Sequence color field',
-      strategy: 'direct',
-      description: 'Use hex colors directly from cluster_color_seq.',
     })
 
     return options
@@ -149,16 +155,15 @@ export const component = (): React.JSX.Element => {
     return Number.isFinite(n) ? Math.trunc(n) : null
   }, [])
 
-  const parseUncertaintyDomainFromPdb = useCallback((pdbText: string): [number, number] | null => {
-    let min = Number.POSITIVE_INFINITY
-    let max = Number.NEGATIVE_INFINITY
+  const parseEnergyDomainFromPdb = useCallback((pdbText: string): [number, number] | null => {
+    const values: number[] = []
 
     for (const line of pdbText.split(/\r?\n/)) {
       if (!line.startsWith('ATOM') && !line.startsWith('HETATM')) {
         continue
       }
 
-      // PDB B-factor/uncertainty is in columns 61-66 (1-based indexing).
+      // PDB B-factor/energy proxy is in columns 61-66 (1-based indexing).
       const raw = line.slice(60, 66).trim()
       const value = Number(raw)
 
@@ -166,20 +171,21 @@ export const component = (): React.JSX.Element => {
         continue
       }
 
-      if (value < min) min = value
-      if (value > max) max = value
+      values.push(value)
     }
 
-    if (!Number.isFinite(min) || !Number.isFinite(max)) {
+    if (values.length === 0) {
       return null
     }
 
-    if (min === max) {
-      const delta = min === 0 ? 1 : Math.abs(min) * 0.1
-      return [min - delta, max + delta]
-    }
+    const vmin = Math.min(...values)
+    const vmax = Math.max(...values)
+    const absmax = Math.max(Math.abs(vmin), Math.abs(vmax))
 
-    return [min, max]
+    const symmetricDomain: [number, number] =
+      absmax === 0 ? [-1, 1] : [-absmax, absmax]
+
+    return symmetricDomain
   }, [])
 
   const parseCsv = useCallback((text: string): CsvRow[] => {
@@ -229,8 +235,8 @@ export const component = (): React.JSX.Element => {
 
     try {
       const [nodesRes, edgesRes] = await Promise.all([
-        fetch('/data/nodes.csv'),
-        fetch('/data/edges.csv'),
+        fetch('/data/thermodynamics_nodes_merged_with_description.csv'),
+        fetch('/data/thermodynamics_edges.csv'),
       ])
 
       if (!nodesRes.ok || !edgesRes.ok) {
@@ -256,8 +262,6 @@ export const component = (): React.JSX.Element => {
         nodeIndex.set(id, idx)
 
         const clusterThermo = toNumber(row.cluster_thermodynamics)
-        const clusterSeqRaw = row.cluster_seq
-        const clusterSeq = toNumber(clusterSeqRaw)
         const cluster = toNumber(row.cluster)
         const pointIndex = toIndex(idx) ?? 0
         return {
@@ -265,7 +269,6 @@ export const component = (): React.JSX.Element => {
           id,
           idx: pointIndex,
           cluster_thermodynamics: clusterThermo,
-          cluster_seq: clusterSeq,
           cluster,
           node_size: 1,
         }
@@ -282,7 +285,7 @@ export const component = (): React.JSX.Element => {
             sourceidx: sourceIndex,
             target: row.target,
             targetidx: targetIndex,
-            value: toNumber(row.weight ?? row.best_score),
+            value: toNumber(row.weight),
           }
         })
         .filter((link): link is GraphLink => link !== null)
@@ -346,6 +349,20 @@ export const component = (): React.JSX.Element => {
 
     const values = new Set<string>()
     data.points.forEach(point => {
+      const value = point.cluster_thermodynamics
+      values.add(value === undefined ? 'Unknown' : String(value))
+    })
+
+    return Array.from(values).sort((a, b) =>
+      a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })
+    )
+  }, [data])
+
+  const structuralClusterFilterOptions = useMemo(() => {
+    if (!data) return []
+
+    const values = new Set<string>()
+    data.points.forEach(point => {
       const value = point.cluster
       values.add(value === undefined ? 'Unknown' : String(value))
     })
@@ -355,13 +372,27 @@ export const component = (): React.JSX.Element => {
     )
   }, [data])
 
-  const clusterSeqFilterOptions = useMemo(() => {
+  const expMethodFilterOptions = useMemo(() => {
     if (!data) return []
 
     const values = new Set<string>()
     data.points.forEach(point => {
-      const value = point.cluster_seq
-      values.add(value === undefined ? 'Unknown' : String(value))
+      const value = point['Exp. Method']
+      values.add(value === undefined || value === '' ? 'Unknown' : String(value))
+    })
+
+    return Array.from(values).sort((a, b) =>
+      a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })
+    )
+  }, [data])
+
+  const diseaseFilterOptions = useMemo(() => {
+    if (!data) return []
+
+    const values = new Set<string>()
+    data.points.forEach(point => {
+      const value = point.Disease
+      values.add(value === undefined || value === '' ? 'Unknown' : String(value))
     })
 
     return Array.from(values).sort((a, b) =>
@@ -378,16 +409,31 @@ export const component = (): React.JSX.Element => {
       setClusterFilter('all')
     }
 
-    if (clusterSeqFilter !== 'all' && !clusterSeqFilterOptions.includes(clusterSeqFilter)) {
-      setClusterSeqFilter('all')
+    if (
+      structuralClusterFilter !== 'all' &&
+      !structuralClusterFilterOptions.includes(structuralClusterFilter)
+    ) {
+      setStructuralClusterFilter('all')
+    }
+
+    if (expMethodFilter !== 'all' && !expMethodFilterOptions.includes(expMethodFilter)) {
+      setExpMethodFilter('all')
+    }
+
+    if (diseaseFilter !== 'all' && !diseaseFilterOptions.includes(diseaseFilter)) {
+      setDiseaseFilter('all')
     }
   }, [
     clusterFilter,
     clusterFilterOptions,
-    clusterSeqFilter,
-    clusterSeqFilterOptions,
+    diseaseFilter,
+    diseaseFilterOptions,
+    expMethodFilter,
+    expMethodFilterOptions,
     proteinFilter,
     proteinFilterOptions,
+    structuralClusterFilter,
+    structuralClusterFilterOptions,
   ])
 
   const currentDataset = useMemo<GraphDataset>(() => {
@@ -395,35 +441,8 @@ export const component = (): React.JSX.Element => {
       return { points: [], links: [] }
     }
 
-    const filteredPoints = data.points.filter(point => {
-      const proteinValue = point.Protein === undefined || point.Protein === '' ? 'Unknown' : String(point.Protein)
-      const clusterValue = point.cluster === undefined ? 'Unknown' : String(point.cluster)
-      const clusterSeqValue =
-        point.cluster_seq === undefined ? 'Unknown' : String(point.cluster_seq)
-
-      if (proteinFilter !== 'all' && proteinValue !== proteinFilter) return false
-      if (clusterFilter !== 'all' && clusterValue !== clusterFilter) return false
-      if (clusterSeqFilter !== 'all' && clusterSeqValue !== clusterSeqFilter) return false
-
-      return true
-    })
-
-    const points = filteredPoints.map((point, idx) => ({
-      ...point,
-      idx: toIndex(idx) ?? 0,
-    }))
-
-    const pointIndexById = new Map(points.map(point => [point.id, point.idx]))
-    const links = data.links
-      .filter(link => pointIndexById.has(link.source) && pointIndexById.has(link.target))
-      .map(link => ({
-        ...link,
-        sourceidx: toIndex(pointIndexById.get(link.source)) ?? 0,
-        targetidx: toIndex(pointIndexById.get(link.target)) ?? 0,
-      }))
-
-    return { points, links }
-  }, [clusterFilter, clusterSeqFilter, data, proteinFilter, toIndex])
+    return data
+  }, [data])
 
   useEffect(() => {
     if (!selectedPoint) return
@@ -439,18 +458,107 @@ export const component = (): React.JSX.Element => {
     [colorOptions, colorByKey]
   )
 
-  const pointLabelOptions = useMemo(() => {
-    const values = new Set<string>(['id', 'Protein'])
-    currentDataset.points.slice(0, 80).forEach(point => {
-      Object.entries(point).forEach(([key, value]) => {
-        if (typeof value === 'string' || typeof value === 'number') {
-          values.add(key)
-        }
-      })
-    })
+  const pointColorConfig = useMemo<PointColorConfig>(() => {
+    const validHexColor = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/
+    const fallbackColor = '#9aa5b1'
 
-    return Array.from(values).map(key => ({ key, label: key }))
-  }, [currentDataset.points])
+    const normalizeHexColor = (value: string | number | undefined): string => {
+      if (typeof value !== 'string') return fallbackColor
+      const trimmed = value.trim()
+      return validHexColor.test(trimmed) ? trimmed : fallbackColor
+    }
+
+    const toCategory = (value: string | number | undefined): string => {
+      if (value === undefined || value === '') return 'Unknown'
+      return String(value)
+    }
+
+    if (colorByKey === 'cluster_color_thermodynamics') {
+      const pointColorByMap: Record<string, string> = {}
+
+      currentDataset.points.forEach(point => {
+        const category = toCategory(point.cluster_thermodynamics)
+        if (pointColorByMap[category] !== undefined) return
+        pointColorByMap[category] = normalizeHexColor(point.cluster_color_thermodynamics)
+      })
+
+      return {
+        pointColorBy: 'cluster_thermodynamics',
+        pointColorStrategy: 'map',
+        pointColorByMap,
+      }
+    }
+
+    if (colorByKey === 'cluster_color') {
+      const pointColorByMap: Record<string, string> = {}
+
+      currentDataset.points.forEach(point => {
+        const category = toCategory(point.cluster)
+        if (pointColorByMap[category] !== undefined) return
+        pointColorByMap[category] = normalizeHexColor(point.cluster_color)
+      })
+
+      return {
+        pointColorBy: 'cluster',
+        pointColorStrategy: 'map',
+        pointColorByMap,
+      }
+    }
+
+    if (colorByKey === 'Protein') {
+      return {
+        pointColorBy: 'Protein',
+        pointColorStrategy: 'categorical',
+      }
+    }
+
+    return {
+      pointColorBy: selectedColorOption?.key || 'id',
+      pointColorStrategy: selectedColorOption?.strategy,
+    }
+  }, [colorByKey, currentDataset.points, selectedColorOption?.key, selectedColorOption?.strategy])
+
+  const typeLegendState = useMemo<TypeLegendState>(() => {
+    if (colorByKey === 'cluster_color_thermodynamics') {
+      return {
+        show: true,
+        label: 'Thermodynamics cluster',
+        sortBy: 'cluster_color_thermodynamics',
+      }
+    }
+
+    if (colorByKey === 'cluster_color') {
+      return {
+        show: true,
+        label: 'Structural cluster',
+        sortBy: 'cluster',
+      }
+    }
+
+    if (colorByKey === 'Protein') {
+      return {
+        show: true,
+        label: 'Protein',
+        sortBy: 'Protein',
+      }
+    }
+
+    return {
+      show: false,
+      label: '',
+      sortBy: undefined,
+    }
+  }, [colorByKey])
+
+  const pointLabelOptions = useMemo(
+    () => [
+      { key: 'id', label: 'PDB Code' },
+      { key: 'Protein', label: 'Protein' },
+      { key: 'cluster_thermodynamics', label: 'Thermodynamics cluster' },
+      { key: 'cluster', label: 'Structural cluster' },
+    ],
+    []
+  )
 
   useEffect(() => {
     if (!pointLabelOptions.some(option => option.key === pointLabelByKey)) {
@@ -469,40 +577,217 @@ export const component = (): React.JSX.Element => {
     [currentDataset.points]
   )
 
+  const handleSearchSelect = useCallback(
+    (result?: Record<string, string | number>) => {
+      if (!result) {
+        setSelectedPoint(null)
+        cosmograph.current?.unselectAllPoints()
+        return
+      }
+
+      const searchId = result.id === undefined ? null : String(result.id)
+      const rawIdx = result.idx
+      const idx = typeof rawIdx === 'number' ? rawIdx : Number(rawIdx)
+
+      if (Number.isFinite(idx) && idx >= 0) {
+        const pointIndex = Math.trunc(idx)
+        const matchedPoint =
+          currentDataset.points[pointIndex] ??
+          (searchId
+            ? currentDataset.points.find(point => point.id === searchId) ?? null
+            : null)
+
+        if (matchedPoint) {
+          setSelectedPoint(matchedPoint)
+          cosmograph.current?.selectPoints([matchedPoint.idx], false)
+        }
+
+        return
+      }
+
+      if (!searchId) return
+
+      const matchedPoint = currentDataset.points.find(point => point.id === searchId) ?? null
+      if (!matchedPoint) return
+
+      setSelectedPoint(matchedPoint)
+      cosmograph.current?.selectPoints([matchedPoint.idx], false)
+    },
+    [currentDataset.points]
+  )
+
   const hasGraphData = currentDataset.points.length > 0
+
+  const activeFilterCount = useMemo(() => {
+    return [
+      proteinFilter,
+      clusterFilter,
+      structuralClusterFilter,
+      expMethodFilter,
+      diseaseFilter,
+    ].filter(value => value !== 'all').length
+  }, [clusterFilter, diseaseFilter, expMethodFilter, proteinFilter, structuralClusterFilter])
+
+  const highlightedPointIndices = useMemo(() => {
+    if (activeFilterCount === 0) return null
+
+    return currentDataset.points
+      .filter(point => {
+        const proteinValue = point.Protein === undefined || point.Protein === '' ? 'Unknown' : String(point.Protein)
+        const thermoClusterValue = point.cluster_thermodynamics === undefined
+          ? 'Unknown'
+          : String(point.cluster_thermodynamics)
+        const structuralClusterValue = point.cluster === undefined ? 'Unknown' : String(point.cluster)
+        const expMethodValue = point['Exp. Method'] === undefined || point['Exp. Method'] === ''
+          ? 'Unknown'
+          : String(point['Exp. Method'])
+        const diseaseValue = point.Disease === undefined || point.Disease === ''
+          ? 'Unknown'
+          : String(point.Disease)
+
+        if (proteinFilter !== 'all' && proteinValue !== proteinFilter) return false
+        if (clusterFilter !== 'all' && thermoClusterValue !== clusterFilter) return false
+        if (structuralClusterFilter !== 'all' && structuralClusterValue !== structuralClusterFilter) return false
+        if (expMethodFilter !== 'all' && expMethodValue !== expMethodFilter) return false
+        if (diseaseFilter !== 'all' && diseaseValue !== diseaseFilter) return false
+
+        return true
+      })
+      .map(point => point.idx)
+  }, [
+    activeFilterCount,
+    clusterFilter,
+    currentDataset.points,
+    diseaseFilter,
+    expMethodFilter,
+    proteinFilter,
+    structuralClusterFilter,
+  ])
+
+  const highlightedPointCount = useMemo(() => {
+    if (activeFilterCount === 0) return currentDataset.points.length
+    return highlightedPointIndices?.length ?? 0
+  }, [activeFilterCount, currentDataset.points.length, highlightedPointIndices])
+
+  const shouldGreyAllPoints = activeFilterCount > 0 && highlightedPointCount === 0
+
+  const applyHighlightSelection = useCallback((graph?: CosmographRef | null) => {
+    const instance = graph ?? cosmograph.current
+    if (!instance) return
+
+    if (!highlightedPointIndices || highlightedPointIndices.length === 0) {
+      instance.unselectAllPoints()
+      return
+    }
+
+    instance.selectPoints(highlightedPointIndices, false)
+  }, [highlightedPointIndices])
+
+  useEffect(() => {
+    applyHighlightSelection()
+  }, [applyHighlightSelection, hasGraphData])
+
+  useEffect(() => {
+    const overlay = searchOverlayRef.current
+    if (!overlay) return
+
+    const allowedLabels = new Set(['all fields', 'pdb code', 'protein'])
+    const hiddenSuggestionFields = new Set(['cluster_color_thermodynamics', 'node_size'])
+
+    const restrictAccessorMenu = () => {
+      const menu = overlay.querySelector<HTMLElement>("[class*='accessorsMenu']")
+      if (!menu) return
+
+      const items = Array.from(menu.querySelectorAll<HTMLLIElement>('li'))
+      items.forEach(item => {
+        const label = (item.textContent ?? '').replace(/\s+/g, ' ').trim().toLowerCase()
+        const isAllowed = allowedLabels.has(label)
+        item.hidden = !isAllowed
+        item.style.display = isAllowed ? '' : 'none'
+        item.setAttribute('aria-hidden', isAllowed ? 'false' : 'true')
+      })
+    }
+
+    const hideSuggestionFields = () => {
+      const results = Array.from(
+        overlay.querySelectorAll<HTMLElement>("[class*='searchResultMultiField']")
+      )
+
+      results.forEach(result => {
+        const fieldNodes = Array.from(result.querySelectorAll<HTMLElement>('span'))
+
+        fieldNodes.forEach(fieldNode => {
+          const labelNode = fieldNode.querySelector('b')
+          if (!labelNode) return
+
+          const label = (labelNode.textContent ?? '')
+            .replace(/:/g, '')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .toLowerCase()
+
+          if (!hiddenSuggestionFields.has(label)) return
+
+          const prev = fieldNode.previousElementSibling as HTMLElement | null
+          const next = fieldNode.nextElementSibling as HTMLElement | null
+
+          fieldNode.remove()
+
+          if (prev?.matches("[class*='separator']")) {
+            prev.remove()
+          } else if (next?.matches("[class*='separator']")) {
+            next.remove()
+          }
+        })
+
+        const listItem = result.closest('li') as HTMLLIElement | null
+        if (!listItem) return
+
+        const hasAnyField = result.querySelector('b') !== null
+        listItem.hidden = !hasAnyField
+        listItem.style.display = hasAnyField ? '' : 'none'
+        listItem.setAttribute('aria-hidden', hasAnyField ? 'false' : 'true')
+      })
+    }
+
+    restrictAccessorMenu()
+    hideSuggestionFields()
+
+    const observer = new MutationObserver(() => {
+      restrictAccessorMenu()
+      hideSuggestionFields()
+    })
+
+    observer.observe(overlay, { childList: true, subtree: true })
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
 
   const selectedPointEntries = useMemo(() => {
     if (!selectedPoint) return []
 
-    const preferredOrder = [
-      'id',
-      'Protein',
-      'cluster_thermodynamics',
-      'cluster_seq',
-      'cluster',
-      'cluster_color_thermodynamics',
-      'cluster_color_seq',
-      'cluster_color',
+    const visibleFields: Array<{ key: string; label: string }> = [
+      { key: 'id', label: 'PDB Code' },
+      { key: 'Protein', label: 'Protein' },
+      { key: 'cluster_thermodynamics', label: 'Thermodynamics cluster' },
+      { key: 'cluster', label: 'Structural cluster' },
+      { key: 'Structure Title', label: 'Structure Title' },
+      { key: 'Exp. Method', label: 'Experimental method' },
+      { key: 'Disease', label: 'Disease' },
     ]
 
-    const seen = new Set<string>()
-    const entries: Array<[string, string | number]> = []
+    return visibleFields.map(field => {
+      const rawValue = selectedPoint[field.key]
+      const displayValue = rawValue === undefined || rawValue === '' ? 'N/A' : String(rawValue)
 
-    preferredOrder.forEach(key => {
-      const value = selectedPoint[key]
-      if (value !== undefined && value !== '') {
-        entries.push([key, value])
-        seen.add(key)
+      return {
+        key: field.key,
+        label: field.label,
+        value: displayValue,
       }
     })
-
-    Object.entries(selectedPoint).forEach(([key, value]) => {
-      if (seen.has(key)) return
-      if (value === undefined || value === '') return
-      entries.push([key, value])
-    })
-
-    return entries
   }, [selectedPoint])
 
   const selectedPointDatabaseUrl = TEST_SELECTED_NODE_URL
@@ -519,7 +804,7 @@ export const component = (): React.JSX.Element => {
 
   const selectedThermodynamicsImageName = useMemo(() => {
     if (selectedThermodynamicsCluster === null) return null
-    return `thermodynamics_cluster_${selectedThermodynamicsCluster}_msa_dendrogram.png`
+    return `multiple_alignments/thermodynamics_cluster_${selectedThermodynamicsCluster}_msa_dendrogram.png`
   }, [selectedThermodynamicsCluster])
 
   const selectedThermodynamicsImageUrl = useMemo(() => {
@@ -535,6 +820,16 @@ export const component = (): React.JSX.Element => {
 
   const closeThermodynamicsClusterModal = useCallback(() => {
     setIsClusterModalOpen(false)
+    setIsClusterImageExpanded(false)
+  }, [])
+
+  const openThermodynamicsClusterFullscreen = useCallback(() => {
+    if (!selectedThermodynamicsImageUrl || clusterImageHasError) return
+    setIsClusterImageExpanded(true)
+  }, [clusterImageHasError, selectedThermodynamicsImageUrl])
+
+  const closeThermodynamicsClusterFullscreen = useCallback(() => {
+    setIsClusterImageExpanded(false)
   }, [])
 
   const openSelectedPointDatabasePage = useCallback(() => {
@@ -543,10 +838,15 @@ export const component = (): React.JSX.Element => {
   }, [selectedPointDatabaseUrl])
 
   useEffect(() => {
-    if (!isClusterModalOpen) return
+    if (!isClusterModalOpen && !isClusterImageExpanded) return
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
+        if (isClusterImageExpanded) {
+          setIsClusterImageExpanded(false)
+          return
+        }
+
         setIsClusterModalOpen(false)
       }
     }
@@ -555,15 +855,27 @@ export const component = (): React.JSX.Element => {
     return () => {
       window.removeEventListener('keydown', onKeyDown)
     }
-  }, [isClusterModalOpen])
+  }, [isClusterImageExpanded, isClusterModalOpen])
 
   useEffect(() => {
     setClusterImageHasError(false)
   }, [selectedThermodynamicsImageUrl])
 
   useEffect(() => {
+    if (!isClusterImageExpanded) return
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [isClusterImageExpanded])
+
+  useEffect(() => {
     if (!selectedPoint) {
       setIsClusterModalOpen(false)
+      setIsClusterImageExpanded(false)
     }
   }, [selectedPoint])
 
@@ -574,14 +886,18 @@ export const component = (): React.JSX.Element => {
     return 'Direct'
   }, [selectedColorOption])
 
-  const activeFilterCount = useMemo(() => {
-    return [proteinFilter, clusterFilter, clusterSeqFilter].filter(value => value !== 'all').length
-  }, [clusterFilter, clusterSeqFilter, proteinFilter])
+  const hasEnergyLegend = proteinColorByBFactor && proteinEnergyDomain !== null
+  const energyLegendMin = hasEnergyLegend ? proteinEnergyDomain[0] : null
+  const energyLegendMax = hasEnergyLegend ? proteinEnergyDomain[1] : null
+  const formatEnergyValue = (value: number) =>
+    value.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })
 
   const clearFilters = useCallback(() => {
     setProteinFilter('all')
     setClusterFilter('all')
-    setClusterSeqFilter('all')
+    setStructuralClusterFilter('all')
+    setExpMethodFilter('all')
+    setDiseaseFilter('all')
   }, [])
 
   useEffect(() => {
@@ -617,6 +933,7 @@ export const component = (): React.JSX.Element => {
       molstarViewerRef.current = null
       setIsMolstarReady(false)
       setIsProteinLoading(false)
+      setProteinEnergyDomain(null)
       return () => {
         cancelled = true
       }
@@ -665,6 +982,7 @@ export const component = (): React.JSX.Element => {
         const message = err instanceof Error ? err.message : 'Could not initialize Molstar viewer.'
         setProteinError(message)
         setIsMolstarReady(false)
+        setProteinEnergyDomain(null)
       }
     }
 
@@ -692,6 +1010,7 @@ export const component = (): React.JSX.Element => {
           setIsProteinLoading(false)
           setProteinError(null)
           setLoadedProteinLabel('No node selected')
+          setProteinEnergyDomain(null)
         }
       }
 
@@ -702,42 +1021,70 @@ export const component = (): React.JSX.Element => {
       }
     }
 
-    const nodeFileUrl = `/data/${encodeURIComponent(selectedId)}.pdb`
-    const urlsToTry = nodeFileUrl !== '/data/test.pdb'
-      ? [nodeFileUrl, '/data/test.pdb']
-      : ['/data/test.pdb']
+    const nodeFileUrl = `/data/stamp_b_factor_residue_pdbs_corrected/${encodeURIComponent(selectedId)}.pdb`
 
     const loadStructure = async () => {
       setIsProteinLoading(true)
       setProteinError(null)
+      setProteinEnergyDomain(null)
 
       let lastError: unknown = null
       let resolvedUrl: string | null = null
       let resolvedPdbText: string | null = null
 
-      for (const url of urlsToTry) {
-        try {
-          const absoluteUrl = new URL(url, window.location.href).toString()
-          const res = await fetch(absoluteUrl)
-          if (res.ok) {
-            resolvedUrl = url
-            resolvedPdbText = await res.text()
-            break
+      try {
+        const absoluteUrl = new URL(nodeFileUrl, window.location.href).toString()
+        const res = await fetch(absoluteUrl)
+
+        if (!res.ok) {
+          const warning =
+            res.status === 404
+              ? `[Molstar] Structure file not found for ${selectedId}: ${nodeFileUrl}`
+              : `[Molstar] Failed to fetch structure for ${selectedId} (${nodeFileUrl}): HTTP ${res.status}`
+          console.warn(warning)
+
+          try {
+            if (viewer.plugin?.clear) {
+              await viewer.plugin.clear()
+            }
+          } catch (clearError) {
+            console.warn(`[Molstar] Could not clear previous structure after fetch failure for ${selectedId}:`, clearError)
           }
-        } catch (err) {
-          lastError = err
+
+          if (!cancelled) {
+            setProteinError(`No structure file found for ${selectedId}.`)
+            setIsProteinLoading(false)
+            setLoadedProteinLabel('Missing structure')
+            setProteinEnergyDomain(null)
+          }
+          return
         }
+
+        resolvedUrl = nodeFileUrl
+        resolvedPdbText = await res.text()
+      } catch (err) {
+        lastError = err
       }
 
       if (!resolvedUrl) {
+        try {
+          if (viewer.plugin?.clear) {
+            await viewer.plugin.clear()
+          }
+        } catch (clearError) {
+          console.warn(`[Molstar] Could not clear previous structure after load error for ${selectedId}:`, clearError)
+        }
+
         if (!cancelled) {
+          console.warn(`[Molstar] Error loading structure for ${selectedId}:`, lastError)
           const message =
             lastError instanceof Error
               ? lastError.message
-              : `No structure file found for ${selectedId}. Expected /data/${selectedId}.pdb or /data/test.pdb.`
+              : `No structure file found for ${selectedId}.`
           setProteinError(message)
           setIsProteinLoading(false)
           setLoadedProteinLabel('Missing structure')
+          setProteinEnergyDomain(null)
         }
         return
       }
@@ -748,26 +1095,28 @@ export const component = (): React.JSX.Element => {
         }
 
         const absoluteResolvedUrl = new URL(resolvedUrl, window.location.href).toString()
-        const uncertaintyDomain = resolvedPdbText
-          ? parseUncertaintyDomainFromPdb(resolvedPdbText)
+        const energyDomain = resolvedPdbText
+          ? parseEnergyDomainFromPdb(resolvedPdbText)
           : null
+        const resolvedEnergyDomain: [number, number] = energyDomain ?? [-1, 1]
+        let didApplyEnergyTheme = false
 
         if (proteinColorByBFactor) {
           try {
             await Promise.resolve(
               viewer.loadStructureFromUrl(absoluteResolvedUrl, 'pdb', false, {
                 representationParams: {
-                  // Use Molstar's B-factor/uncertainty theme with a custom color scale.
+                  // Use Molstar's B-factor theme as an energy profile with a custom color scale.
                   theme: {
                     globalName: 'uncertainty',
                     globalColorParams: {
-                      domain: uncertaintyDomain ?? [0, 1],
+                      domain: resolvedEnergyDomain,
                       list: {
                         kind: 'interpolate',
                         colors: [
-                          0xff0000, // red (high)
-                          0xDDDDDD, // light grey (mid)
-                          0x0000ff, // blue (low)
+                          0xff0000, // red
+                          0xffffff, // white
+                          0x0000ff, // blue
                         ],
                       },
                     },
@@ -775,17 +1124,20 @@ export const component = (): React.JSX.Element => {
                 },
               })
             )
+            didApplyEnergyTheme = true
           } catch {
             // Fallback to the default preset if the B-factor theme isn't available for this file.
             await Promise.resolve(viewer.loadStructureFromUrl(absoluteResolvedUrl, 'pdb', false))
+            didApplyEnergyTheme = false
           }
         } else {
           await Promise.resolve(viewer.loadStructureFromUrl(absoluteResolvedUrl, 'pdb', false))
         }
 
         if (!cancelled) {
-          setLoadedProteinLabel(resolvedUrl.split('/').pop() ?? 'test.pdb')
+          setLoadedProteinLabel(resolvedUrl.split('/').pop() ?? `${selectedId}.pdb`)
           setIsProteinLoading(false)
+          setProteinEnergyDomain(didApplyEnergyTheme ? resolvedEnergyDomain : null)
         }
 
         return
@@ -797,6 +1149,7 @@ export const component = (): React.JSX.Element => {
         const message = lastError instanceof Error ? lastError.message : 'Failed to load structure file.'
         setProteinError(message)
         setIsProteinLoading(false)
+        setProteinEnergyDomain(null)
       }
     }
 
@@ -805,7 +1158,7 @@ export const component = (): React.JSX.Element => {
     return () => {
       cancelled = true
     }
-  }, [isMolstarReady, panelView, parseUncertaintyDomainFromPdb, proteinColorByBFactor, selectedPoint?.id])
+  }, [isMolstarReady, panelView, parseEnergyDomainFromPdb, proteinColorByBFactor, selectedPoint?.id])
 
   useEffect(() => {
     return () => {
@@ -844,7 +1197,7 @@ export const component = (): React.JSX.Element => {
           </button>
         </nav>
 
-        <aside className={s.sidePanel}>
+        <aside className={`${s.sidePanel} ${panelView === 'info' ? s.sidePanelInfo : ''}`}>
           {panelView === 'graph' ? (
             <section className={s.panelCard}>
               <div className={s.panelTopRow}>
@@ -871,115 +1224,124 @@ export const component = (): React.JSX.Element => {
 
               {graphConfigView === 'points' ? (
                 <>
-                  <label className={s.controlLabel} htmlFor="colorBy">
-                    Color by
-                  </label>
-                  <select
-                    id="colorBy"
-                    className={s.selectInput}
-                    value={colorByKey}
-                    onChange={event => setColorByKey(event.target.value)}
-                  >
-                    {colorOptions.map(option => (
-                      <option key={option.key} value={option.key}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  <div className={s.controlStack}>
+                    <div className={s.controlGroup}>
+                      <label className={s.controlLabel} htmlFor="colorBy">
+                        Color by
+                      </label>
+                      <select
+                        id="colorBy"
+                        className={s.selectInput}
+                        value={colorByKey}
+                        onChange={event => setColorByKey(event.target.value)}
+                      >
+                        {colorOptions.map(option => (
+                          <option key={option.key} value={option.key}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-                  <label className={s.controlLabel} htmlFor="pointSizeBy">
-                    Size
-                  </label>
-                  <div className={s.sliderRow}>
-                    <input
-                      id="pointSizeBy"
-                      className={s.sliderInput}
-                      type="range"
-                      min="1"
-                      max="10"
-                      step="0.1"
-                      value={pointSizeScale}
-                      onChange={event => setPointSizeScale(Number(event.target.value))}
-                    />
+                    <div className={s.controlGroup}>
+                      <label className={s.controlLabel} htmlFor="pointSizeBy">
+                        Size
+                      </label>
+                      <div className={s.sliderRow}>
+                        <input
+                          id="pointSizeBy"
+                          className={s.sliderInput}
+                          type="range"
+                          min="1"
+                          max="10"
+                          step="0.1"
+                          value={pointSizeScale}
+                          onChange={event => setPointSizeScale(Number(event.target.value))}
+                        />
+                      </div>
+                    </div>
+
+                    <div className={s.controlGroup}>
+                      <div className={s.toggleRow}>
+                        <label className={s.controlLabel} htmlFor="showPointLabels">
+                          Show labels
+                        </label>
+                        <input
+                          id="showPointLabels"
+                          className={s.toggleInput}
+                          type="checkbox"
+                          checked={showPointLabels}
+                          onChange={event => setShowPointLabels(event.target.checked)}
+                        />
+                      </div>
+                    </div>
+
+                    <div className={s.controlGroup}>
+                      <label className={s.controlLabel} htmlFor="pointLabelBy">
+                        Label by
+                      </label>
+                      <select
+                        id="pointLabelBy"
+                        className={s.selectInput}
+                        value={pointLabelByKey}
+                        disabled={!showPointLabels}
+                        onChange={event => setPointLabelByKey(event.target.value)}
+                      >
+                        {pointLabelOptions.map(option => (
+                          <option key={option.key} value={option.key}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
-
-                  <div className={s.toggleRow}>
-                    <label className={s.controlLabel} htmlFor="showPointLabels">
-                      Show labels
-                    </label>
-                    <input
-                      id="showPointLabels"
-                      className={s.toggleInput}
-                      type="checkbox"
-                      checked={showPointLabels}
-                      onChange={event => setShowPointLabels(event.target.checked)}
-                    />
-                  </div>
-
-                  <label className={s.controlLabel} htmlFor="pointLabelBy">
-                    Label by
-                  </label>
-                  <select
-                    id="pointLabelBy"
-                    className={s.selectInput}
-                    value={pointLabelByKey}
-                    disabled={!showPointLabels}
-                    onChange={event => setPointLabelByKey(event.target.value)}
-                  >
-                    {pointLabelOptions.map(option => (
-                      <option key={option.key} value={option.key}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-
-                  <p className={s.helpText}>
-                    {selectedColorOption?.description ?? 'No color fields detected in nodes.csv.'}
-                  </p>
                 </>
               ) : null}
 
               {graphConfigView === 'links' ? (
-                <>
-                  <div className={s.toggleRow}>
-                    <label className={s.controlLabel} htmlFor="showLinksToggle">
-                      Show edges
-                    </label>
-                    <label className={s.switchControl}>
-                      <input
-                        id="showLinksToggle"
-                        className={s.switchInput}
-                        type="checkbox"
-                        checked={showLinks}
-                        onChange={event => setShowLinks(event.target.checked)}
-                      />
-                      <span className={s.switchTrack} aria-hidden="true">
-                        <span className={s.switchThumb} />
-                      </span>
-                      <span className={s.switchText}>{showLinks ? 'On' : 'Off'}</span>
-                    </label>
+                <div className={s.controlStack}>
+                  <div className={s.controlGroup}>
+                    <div className={s.toggleRow}>
+                      <label className={s.controlLabel} htmlFor="showLinksToggle">
+                        Show edges
+                      </label>
+                      <label className={s.switchControl}>
+                        <input
+                          id="showLinksToggle"
+                          className={s.switchInput}
+                          type="checkbox"
+                          checked={showLinks}
+                          onChange={event => setShowLinks(event.target.checked)}
+                        />
+                        <span className={s.switchTrack} aria-hidden="true">
+                          <span className={s.switchThumb} />
+                        </span>
+                        <span className={s.switchText}>{showLinks ? 'On' : 'Off'}</span>
+                      </label>
+                    </div>
                   </div>
 
-                  <label className={s.controlLabel} htmlFor="linkWidthBy">
-                    Edge width
-                  </label>
-                  <div className={s.sliderRow}>
-                    <input
-                      id="linkWidthBy"
-                      className={s.sliderInput}
-                      type="range"
-                      min="0.4"
-                      max="3"
-                      step="0.1"
-                      value={edgeWidthScale}
-                      disabled={!showLinks}
-                      onChange={event => setEdgeWidthScale(Number(event.target.value))}
-                    />
-                    <span className={s.sliderValue}>{edgeWidthScale.toFixed(1)}x</span>
+                  <div className={s.controlGroup}>
+                    <label className={s.controlLabel} htmlFor="linkWidthBy">
+                      Edge width
+                    </label>
+                    <div className={s.sliderRow}>
+                      <input
+                        id="linkWidthBy"
+                        className={s.sliderInput}
+                        type="range"
+                        min="0.005"
+                        max="0.3"
+                        step="0.001"
+                        value={edgeWidthScale}
+                        disabled={!showLinks}
+                        onChange={event => setEdgeWidthScale(Number(event.target.value))}
+                      />
+                    </div>
                   </div>
 
                   <p className={s.helpText}>Toggle edges and adjust global edge thickness.</p>
-                </>
+                </div>
               ) : null}
             </section>
           ) : null}
@@ -991,103 +1353,145 @@ export const component = (): React.JSX.Element => {
                 <span className={s.strategyBadge}>{activeFilterCount} active</span>
               </div>
 
-              <div className={s.filterControls}>
-                <div>
-                  <label className={s.controlLabel} htmlFor="proteinFilter">
-                    Protein
-                  </label>
-                  <select
-                    id="proteinFilter"
-                    className={s.selectInput}
-                    value={proteinFilter}
-                    onChange={event => setProteinFilter(event.target.value)}
-                  >
-                    <option value="all">All proteins</option>
-                    {proteinFilterOptions.map(value => (
-                      <option key={value} value={value}>
-                        {value}
-                      </option>
-                    ))}
-                  </select>
+              <div className={s.controlStack}>
+                <div className={s.filterControls}>
+                  <div className={s.controlGroup}>
+                    <label className={s.controlLabel} htmlFor="proteinFilter">
+                      Protein
+                    </label>
+                    <select
+                      id="proteinFilter"
+                      className={s.selectInput}
+                      value={proteinFilter}
+                      onChange={event => setProteinFilter(event.target.value)}
+                    >
+                      <option value="all">All proteins</option>
+                      {proteinFilterOptions.map(value => (
+                        <option key={value} value={value}>
+                          {value}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className={s.controlGroup}>
+                    <label className={s.controlLabel} htmlFor="clusterFilter">
+                      Thermodynamics cluster
+                    </label>
+                    <select
+                      id="clusterFilter"
+                      className={s.selectInput}
+                      value={clusterFilter}
+                      onChange={event => setClusterFilter(event.target.value)}
+                    >
+                      <option value="all">All thermodynamics clusters</option>
+                      {clusterFilterOptions.map(value => (
+                        <option key={value} value={value}>
+                          {value}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className={s.controlGroup}>
+                    <label className={s.controlLabel} htmlFor="structuralClusterFilter">
+                      Structural cluster
+                    </label>
+                    <select
+                      id="structuralClusterFilter"
+                      className={s.selectInput}
+                      value={structuralClusterFilter}
+                      onChange={event => setStructuralClusterFilter(event.target.value)}
+                    >
+                      <option value="all">All structural clusters</option>
+                      {structuralClusterFilterOptions.map(value => (
+                        <option key={value} value={value}>
+                          {value}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className={s.controlGroup}>
+                    <label className={s.controlLabel} htmlFor="expMethodFilter">
+                      Experimental method
+                    </label>
+                    <select
+                      id="expMethodFilter"
+                      className={s.selectInput}
+                      value={expMethodFilter}
+                      onChange={event => setExpMethodFilter(event.target.value)}
+                    >
+                      <option value="all">All methods</option>
+                      {expMethodFilterOptions.map(value => (
+                        <option key={value} value={value}>
+                          {value}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className={s.controlGroup}>
+                    <label className={s.controlLabel} htmlFor="diseaseFilter">
+                      Disease
+                    </label>
+                    <select
+                      id="diseaseFilter"
+                      className={s.selectInput}
+                      value={diseaseFilter}
+                      onChange={event => setDiseaseFilter(event.target.value)}
+                    >
+                      <option value="all">All diseases</option>
+                      {diseaseFilterOptions.map(value => (
+                        <option key={value} value={value}>
+                          {value}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
 
-                <div>
-                  <label className={s.controlLabel} htmlFor="clusterFilter">
-                    Cluster
-                  </label>
-                  <select
-                    id="clusterFilter"
-                    className={s.selectInput}
-                    value={clusterFilter}
-                    onChange={event => setClusterFilter(event.target.value)}
+                <div className={s.filterFooter}>
+                  <p className={s.filterSummary}>
+                    Highlighting {highlightedPointCount} of {data?.points.length ?? 0} nodes
+                  </p>
+                  <button
+                    type="button"
+                    className={s.button}
+                    disabled={activeFilterCount === 0}
+                    onClick={clearFilters}
                   >
-                    <option value="all">All clusters</option>
-                    {clusterFilterOptions.map(value => (
-                      <option key={value} value={value}>
-                        {value}
-                      </option>
-                    ))}
-                  </select>
+                    Clear
+                  </button>
                 </div>
-
-                <div>
-                  <label className={s.controlLabel} htmlFor="clusterSeqFilter">
-                    Cluster Seq
-                  </label>
-                  <select
-                    id="clusterSeqFilter"
-                    className={s.selectInput}
-                    value={clusterSeqFilter}
-                    onChange={event => setClusterSeqFilter(event.target.value)}
-                  >
-                    <option value="all">All sequence clusters</option>
-                    {clusterSeqFilterOptions.map(value => (
-                      <option key={value} value={value}>
-                        {value}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className={s.filterFooter}>
-                <p className={s.filterSummary}>
-                  Showing {currentDataset.points.length} of {data?.points.length ?? 0} nodes
-                </p>
-                <button
-                  type="button"
-                  className={s.button}
-                  disabled={activeFilterCount === 0}
-                  onClick={clearFilters}
-                >
-                  Clear
-                </button>
               </div>
             </section>
           ) : null}
 
           {panelView === 'info' ? (
             <>
-              <section className={s.panelCard}>
+              <section className={`${s.panelCard} ${s.selectedNodeCard}`}>
                 <div className={s.panelTopRow}>
                   <h3 className={s.panelTitle}>Selected Node</h3>
                   <span className={s.selectedNodeTag}>{selectedPoint?.id ?? 'None selected'}</span>
                 </div>
-                {selectedPoint ? (
-                  <dl className={s.infoList}>
-                    {selectedPointEntries.map(([key, value]) => (
-                      <div key={key} className={s.infoRow}>
-                        <dt>{key}</dt>
-                        <dd>{String(value)}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                ) : (
-                  <p className={s.helpText}>Select a node to inspect all node fields from nodes.csv.</p>
-                )}
+                <div className={s.infoPaneContent}>
+                  {selectedPoint ? (
+                    <dl className={s.infoList}>
+                      {selectedPointEntries.map(entry => (
+                        <div key={entry.key} className={s.infoRow}>
+                          <dt>{entry.label}</dt>
+                          <dd>{entry.value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  ) : (
+                    <p className={s.helpText}>Select a node to inspect key metadata fields.</p>
+                  )}
+                </div>
               </section>
 
-              <section className={s.panelCard}>
+              <section className={`${s.panelCard} ${s.proteinCard}`}>
                 <div className={s.panelTopRow}>
                   <h3 className={s.panelTitle}>Protein 3D (Molstar)</h3>
                   <div className={s.panelActions}>
@@ -1111,51 +1515,94 @@ export const component = (): React.JSX.Element => {
                   />
                 ) : null}
 
-                <div className={`${s.molstarShell} ${isMolstarExpanded ? s.molstarShellExpanded : ''}`}>
-                  {isMolstarExpanded ? (
-                    <button
-                      type="button"
-                      className={s.molstarCloseButton}
-                      aria-label="Close expanded protein viewer"
-                      onClick={() => setIsMolstarExpanded(false)}
-                    >
-                      Close
-                    </button>
+                <div className={s.infoPaneContent}>
+                  <div className={`${s.molstarShell} ${isMolstarExpanded ? s.molstarShellExpanded : ''}`}>
+                    {isMolstarExpanded ? (
+                      <button
+                        type="button"
+                        className={s.molstarCloseButton}
+                        aria-label="Close expanded protein viewer"
+                        onClick={() => setIsMolstarExpanded(false)}
+                      >
+                        Close
+                      </button>
+                    ) : null}
+
+                    <div id={MOLSTAR_TARGET_ID} className={s.molstarViewport} />
+                    {isProteinLoading ? <div className={s.molstarOverlay}>Loading structure...</div> : null}
+                    {!isProteinLoading && !selectedPoint ? (
+                      <div className={s.molstarOverlay}>Select a node to load its protein structure.</div>
+                    ) : null}
+                    {isMolstarExpanded && proteinColorByBFactor ? (
+                      <div
+                        className={`${s.energyLegendCard} ${s.energyLegendCardFloating}`}
+                        role="group"
+                        aria-label="Protein energy color legend"
+                      >
+                        <div className={s.energyLegendHeaderRow}>
+                          <p className={s.energyLegendTitle}>Residue-level &Delta;G</p>
+                        </div>
+
+                        <div
+                          className={`${s.energyLegendGradient} ${hasEnergyLegend ? '' : s.energyLegendGradientDisabled}`}
+                          aria-hidden="true"
+                        />
+
+                        <div className={s.energyLegendTicks}>
+                          <span>{hasEnergyLegend && energyLegendMin !== null ? formatEnergyValue(energyLegendMin) : 'low'}</span>
+                          <span>0</span>
+                          <span>{hasEnergyLegend && energyLegendMax !== null ? formatEnergyValue(energyLegendMax) : 'high'}</span>
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+
+                  <div className={s.toggleRow}>
+                    <label className={s.controlLabel} htmlFor="proteinColorByBFactor">
+                      Color by Energy Profile (PDB)
+                    </label>
+                    <label className={s.switchControl} htmlFor="proteinColorByBFactor">
+                      <input
+                        id="proteinColorByBFactor"
+                        className={s.switchInput}
+                        type="checkbox"
+                        checked={proteinColorByBFactor}
+                        onChange={event => setProteinColorByBFactor(event.target.checked)}
+                      />
+                      <span className={s.switchTrack} aria-hidden="true">
+                        <span className={s.switchThumb} />
+                      </span>
+                      <span className={s.switchText}>{proteinColorByBFactor ? 'On' : 'Off'}</span>
+                    </label>
+                  </div>
+
+                  <p className={s.helpText}>
+                    {selectedPoint
+                      ? `Toggle coloring the structure by the energy profile from the PDB file.`
+                      : 'No structure is loaded until a node is selected.'}
+                  </p>
+
+                  {proteinColorByBFactor ? (
+                    <div className={s.energyLegendCard} role="group" aria-label="Protein energy color legend">
+                      <div className={s.energyLegendHeaderRow}>
+                        <p className={s.energyLegendTitle}>Residue-level &Delta;G</p>
+                      </div>
+
+                      <div
+                        className={`${s.energyLegendGradient} ${hasEnergyLegend ? '' : s.energyLegendGradientDisabled}`}
+                        aria-hidden="true"
+                      />
+
+                      <div className={s.energyLegendTicks}>
+                        <span>{hasEnergyLegend && energyLegendMin !== null ? formatEnergyValue(energyLegendMin) : 'low'}</span>
+                        <span>0</span>
+                        <span>{hasEnergyLegend && energyLegendMax !== null ? formatEnergyValue(energyLegendMax) : 'high'}</span>
+                      </div>
+                    </div>
                   ) : null}
 
-                  <div id={MOLSTAR_TARGET_ID} className={s.molstarViewport} />
-                  {isProteinLoading ? <div className={s.molstarOverlay}>Loading structure...</div> : null}
-                  {!isProteinLoading && !selectedPoint ? (
-                    <div className={s.molstarOverlay}>Select a node to load its protein structure.</div>
-                  ) : null}
+                  {proteinError ? <div className={s.error}>{proteinError}</div> : null}
                 </div>
-
-                <div className={s.toggleRow}>
-                  <label className={s.controlLabel} htmlFor="proteinColorByBFactor">
-                    Color by Energy Profile (PDB)
-                  </label>
-                  <label className={s.switchControl} htmlFor="proteinColorByBFactor">
-                    <input
-                      id="proteinColorByBFactor"
-                      className={s.switchInput}
-                      type="checkbox"
-                      checked={proteinColorByBFactor}
-                      onChange={event => setProteinColorByBFactor(event.target.checked)}
-                    />
-                    <span className={s.switchTrack} aria-hidden="true">
-                      <span className={s.switchThumb} />
-                    </span>
-                    <span className={s.switchText}>{proteinColorByBFactor ? 'On' : 'Off'}</span>
-                  </label>
-                </div>
-
-                <p className={s.helpText}>
-                  {selectedPoint
-                    ? `File source: /data/${selectedPoint.id}.pdb with fallback to /data/test.pdb.`
-                    : 'No structure is loaded until a node is selected.'}
-                </p>
-
-                {proteinError ? <div className={s.error}>{proteinError}</div> : null}
               </section>
             </>
           ) : null}
@@ -1169,11 +1616,11 @@ export const component = (): React.JSX.Element => {
               <h2 className={s.canvasTitle}>Amyloid Structure Network</h2>
               <p className={s.canvasSubtitle}>
                 {currentDataset.points.length} nodes, {currentDataset.links.length} edges
+                {activeFilterCount > 0 ? `, ${highlightedPointCount} highlighted` : ''}
               </p>
             </div>
             <div className={s.headerMeta}>
               <span className={s.metaChip}>Color field: {selectedColorOption?.label ?? 'N/A'}</span>
-              <span className={s.metaChip}>Mode: {strategyLabel}</span>
             </div>
           </header>
 
@@ -1199,33 +1646,74 @@ export const component = (): React.JSX.Element => {
                   View cluster alignment
                 </button>
               </div>
+
+              <div ref={searchOverlayRef} className={s.searchOverlay}>
+                <CosmographSearch
+                  ref={search}
+                  className={s.searchInput}
+                  placeholderText="Search across all node fields"
+                  suggestionFields={initialSuggestionFields}
+                  onSelect={handleSearchSelect}
+                  onClear={() => {
+                    setSelectedPoint(null)
+                    cosmograph.current?.unselectAllPoints()
+                  }}
+                  showFooter={true}
+                  showAccessorsMenu={true}
+                />
+              </div>
+
+              {typeLegendState.show ? (
+                <div className={s.graphLegendOverlay}>
+                  <CosmographTypeColorLegend
+                    className={s.graphLegend}
+                    showLabel={true}
+                    labelResolver={typeLegendState.label}
+                    sortBy={typeLegendState.sortBy}
+                    sortOrder="asc"
+                    hideUnknown={false}
+                    selectOnClick={true}
+                    maxDisplayedItems={12}
+                  />
+                </div>
+              ) : null}
+
               {hasGraphData ? (
               <Cosmograph
                 ref={cosmograph}
+                onMount={graph => applyHighlightSelection(graph)}
                 points={currentDataset.points ?? []}
                 links={currentDataset.links ?? []}
                 pointIdBy="id"
                 pointIndexBy="idx"
                 pointLabelBy={pointLabelByKey}
                 showLabels={showPointLabels}
-                pointColorBy={selectedColorOption?.key || 'id'}
-                backgroundColor="#eeeeee"
+                pointLabelClassName={shouldGreyAllPoints ? s.dimmedGraphLabel : undefined}
+                hoveredPointLabelClassName={shouldGreyAllPoints ? s.dimmedGraphLabel : undefined}
+                pointColorBy={pointColorConfig.pointColorBy}
+                pointColorStrategy={pointColorConfig.pointColorStrategy}
+                pointColorByMap={pointColorConfig.pointColorByMap}
+                pointGreyoutColor="#b0b9c6"
+                pointGreyoutOpacity={0.15}
+                pointOpacity={shouldGreyAllPoints ? 0.15 : 1}
+                backgroundColor="#ffffff"
                 pointSizeBy="node_size"
                 pointSizeScale={pointSizeScale}
-                pointClusterBy="cluster_thermodynamics"
                 randomSeed={42}
                 simulationGravity={1}
                 simulationRepulsion={10}
-                simulationLinkSpring={1}
+                simulationRepulsionTheta={1.15}
+                simulationLinkSpring={0.5}
                 simulationLinkDistance={10}
                 simulationFriction={0.85}
-                simulationCluster={1}
                 linkSourceBy="source"
                 linkTargetBy="target"
                 linkSourceIndexBy="sourceidx"
                 linkTargetIndexBy="targetidx"
                 linkWidthBy="value"
                 linkWidthScale={showLinks ? edgeWidthScale : 0}
+                linkGreyoutOpacity={0.06}
+                linkOpacity={shouldGreyAllPoints ? 0.06 : 1}
                 simulationDecay={100}
                 fitViewDelay={400}
                 initialZoomLevel={1.2}
@@ -1238,7 +1726,7 @@ export const component = (): React.JSX.Element => {
               ) : null}
               {isLoading ? <div className={s.loadingOverlay}>Loading data…</div> : null}
               {!isLoading && !error && !hasGraphData ? (
-                <div className={s.loadingOverlay}>No nodes available for the current filter selection.</div>
+                <div className={s.loadingOverlay}>No nodes available in the current dataset.</div>
               ) : null}
             </div>
 
@@ -1254,22 +1742,34 @@ export const component = (): React.JSX.Element => {
                       ? 'Thermodynamics cluster'
                       : `Thermodynamics cluster ${selectedThermodynamicsCluster}`}
                   </h3>
-                  <button
-                    type="button"
-                    className={s.button}
-                    onClick={closeThermodynamicsClusterModal}
-                  >
-                    Close
-                  </button>
+                  <div className={s.clusterPreviewActions}>
+                    <button
+                      type="button"
+                      className={s.button}
+                      disabled={!selectedThermodynamicsImageUrl || clusterImageHasError}
+                      onClick={openThermodynamicsClusterFullscreen}
+                    >
+                      Fullscreen
+                    </button>
+                    <button
+                      type="button"
+                      className={s.button}
+                      onClick={closeThermodynamicsClusterModal}
+                    >
+                      Close
+                    </button>
+                  </div>
                 </div>
 
                 {selectedThermodynamicsImageUrl && !clusterImageHasError ? (
-                  <img
-                    className={s.clusterPreviewImage}
-                    src={selectedThermodynamicsImageUrl}
-                    alt={`Dendrogram for thermodynamics cluster ${selectedThermodynamicsCluster ?? 'unknown'}`}
-                    onError={() => setClusterImageHasError(true)}
-                  />
+                  <div className={s.clusterPreviewScrollArea}>
+                    <img
+                      className={s.clusterPreviewImage}
+                      src={selectedThermodynamicsImageUrl}
+                      alt={`Dendrogram for thermodynamics cluster ${selectedThermodynamicsCluster ?? 'unknown'}`}
+                      onError={() => setClusterImageHasError(true)}
+                    />
+                  </div>
                 ) : (
                   <p className={s.clusterPreviewMessage}>
                     {selectedThermodynamicsImageName
@@ -1277,6 +1777,44 @@ export const component = (): React.JSX.Element => {
                       : 'Select a node with a valid thermodynamics cluster value.'}
                   </p>
                 )}
+              </section>
+            ) : null}
+
+            {isClusterImageExpanded && selectedThermodynamicsImageUrl && !clusterImageHasError ? (
+              <section
+                className={s.clusterPreviewFullscreenBackdrop}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Thermodynamics cluster dendrogram fullscreen preview"
+              >
+                <div className={s.clusterPreviewFullscreenCard}>
+                  <div className={s.clusterPreviewHeader}>
+                    <h3 className={s.clusterPreviewTitle}>
+                      {selectedThermodynamicsCluster === null
+                        ? 'Thermodynamics cluster'
+                        : `Thermodynamics cluster ${selectedThermodynamicsCluster}`}
+                    </h3>
+                    <button
+                      type="button"
+                      className={s.button}
+                      onClick={closeThermodynamicsClusterFullscreen}
+                    >
+                      Close fullscreen
+                    </button>
+                  </div>
+
+                  <div className={`${s.clusterPreviewScrollArea} ${s.clusterPreviewScrollAreaFullscreen}`}>
+                    <img
+                      className={s.clusterPreviewImage}
+                      src={selectedThermodynamicsImageUrl}
+                      alt={`Dendrogram for thermodynamics cluster ${selectedThermodynamicsCluster ?? 'unknown'}`}
+                      onError={() => {
+                        setClusterImageHasError(true)
+                        setIsClusterImageExpanded(false)
+                      }}
+                    />
+                  </div>
+                </div>
               </section>
             ) : null}
           </div>
