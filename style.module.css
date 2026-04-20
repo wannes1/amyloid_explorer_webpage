@@ -877,7 +877,7 @@
   height: 12px;
   border-radius: 999px;
   border: 1px solid rgb(35 47 62 / 18%);
-  background: linear-gradient(90deg, #ff0000 0%, #ffffff 50%, #0000ff 100%);
+  background: linear-gradient(90deg, #0000ff 0%, #ffffff 50%, #ff0000 100%);
 }
 
 .energyLegendGradientDisabled {
