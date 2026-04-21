@@ -444,6 +444,11 @@ export const component = (): React.JSX.Element => {
     return data
   }, [data])
 
+  const allPointIndices = useMemo(
+    () => currentDataset.points.map(point => point.idx),
+    [currentDataset.points]
+  )
+
   useEffect(() => {
     if (!selectedPoint) return
 
@@ -566,17 +571,6 @@ export const component = (): React.JSX.Element => {
     }
   }, [pointLabelByKey, pointLabelOptions])
 
-  const handleGraphClick = useCallback(
-    (pointIndex?: number) => {
-      if (typeof pointIndex === 'number' && pointIndex >= 0) {
-        setSelectedPoint(currentDataset.points[pointIndex] ?? null)
-      } else {
-        setSelectedPoint(null)
-      }
-    },
-    [currentDataset.points]
-  )
-
   const handleSearchSelect = useCallback(
     (result?: Record<string, string | number>) => {
       if (!result) {
@@ -612,6 +606,17 @@ export const component = (): React.JSX.Element => {
 
       setSelectedPoint(matchedPoint)
       cosmograph.current?.selectPoints([matchedPoint.idx], false)
+    },
+    [currentDataset.points]
+  )
+
+  const handleGraphClick = useCallback(
+    (pointIndex?: number) => {
+      if (typeof pointIndex === 'number' && pointIndex >= 0) {
+        setSelectedPoint(currentDataset.points[pointIndex] ?? null)
+      } else {
+        setSelectedPoint(null)
+      }
     },
     [currentDataset.points]
   )
@@ -682,6 +687,17 @@ export const component = (): React.JSX.Element => {
 
     instance.selectPoints(highlightedPointIndices, false)
   }, [highlightedPointIndices])
+
+  const handleGraphMount = useCallback(
+    (graph?: CosmographRef | null) => {
+      applyHighlightSelection(graph)
+
+      if (!graph || allPointIndices.length === 0) return
+
+      graph.fitViewByIndices(allPointIndices, 0, 0.1)
+    },
+    [allPointIndices, applyHighlightSelection]
+  )
 
   useEffect(() => {
     applyHighlightSelection()
@@ -1681,7 +1697,7 @@ export const component = (): React.JSX.Element => {
               {hasGraphData ? (
               <Cosmograph
                 ref={cosmograph}
-                onMount={graph => applyHighlightSelection(graph)}
+                onMount={handleGraphMount}
                 points={currentDataset.points ?? []}
                 links={currentDataset.links ?? []}
                 pointIdBy="id"
@@ -1715,8 +1731,7 @@ export const component = (): React.JSX.Element => {
                 linkGreyoutOpacity={0.06}
                 linkOpacity={shouldGreyAllPoints ? 0.06 : 1}
                 simulationDecay={100}
-                fitViewDelay={400}
-                initialZoomLevel={1.2}
+                fitViewOnInit={false}
                 scalePointsOnZoom={true}
                 scaleLinksOnZoom={true}
                 selectPointOnClick={true}
