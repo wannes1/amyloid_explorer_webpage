@@ -72,7 +72,7 @@ type PanelView = 'graph' | 'filters' | 'info'
 type GraphConfigView = 'points' | 'links'
 
 const MOLSTAR_TARGET_ID = 'molstar-viewer-root'
-const TEST_SELECTED_NODE_URL = 'https://amyloid-explorer.switchlab.org/database/Abeta42?strct=8KEW'
+const DATABASE_BASE_URL = 'https://amyloid-explorer.switchlab.org/database/'
 const initialSuggestionFields: Record<string, string> = {
   id: 'PDB Code',
   Protein: 'Protein',
@@ -806,7 +806,19 @@ export const component = (): React.JSX.Element => {
     })
   }, [selectedPoint])
 
-  const selectedPointDatabaseUrl = TEST_SELECTED_NODE_URL
+  const selectedPointDatabaseUrl = useMemo(() => {
+    if (!selectedPoint) return null
+
+    const protein = selectedPoint.Protein
+    const pdbId = selectedPoint.id
+
+    if (!protein || !pdbId) return null
+
+    const encodedProtein = encodeURIComponent(String(protein))
+    const encodedPdb = encodeURIComponent(String(pdbId).toUpperCase())
+
+    return `${DATABASE_BASE_URL}${encodedProtein}?strct=${encodedPdb}`
+  }, [selectedPoint])
 
   const selectedThermodynamicsCluster = useMemo(() => {
     if (!selectedPoint) return null
