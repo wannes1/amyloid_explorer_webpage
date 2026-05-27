@@ -1,4 +1,4 @@
-# Amyloids Interface
+# Amyloid Landscape Explorer
 
 React + TypeScript web app for exploring amyloid graph data with Cosmograph.
 
