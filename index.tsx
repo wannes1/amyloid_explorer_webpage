@@ -377,7 +377,7 @@ export const component = (): React.JSX.Element => {
 
     const values = new Set<string>()
     data.points.forEach(point => {
-      const value = point['Exp. Method']
+      const value = point['Exp_Method']
       values.add(value === undefined || value === '' ? 'Unknown' : String(value))
     })
 
@@ -643,9 +643,9 @@ export const component = (): React.JSX.Element => {
           ? 'Unknown'
           : String(point.cluster_thermodynamics)
         const structuralClusterValue = point.cluster === undefined ? 'Unknown' : String(point.cluster)
-        const expMethodValue = point['Exp. Method'] === undefined || point['Exp. Method'] === ''
+        const expMethodValue = point['Exp_Method'] === undefined || point['Exp_Method'] === ''
           ? 'Unknown'
-          : String(point['Exp. Method'])
+          : String(point['Exp_Method'])
         const diseaseValue = point.Disease === undefined || point.Disease === ''
           ? 'Unknown'
           : String(point.Disease)
@@ -790,7 +790,7 @@ export const component = (): React.JSX.Element => {
       { key: 'cluster_thermodynamics', label: 'Thermodynamics cluster' },
       { key: 'cluster', label: 'Structural cluster' },
       { key: 'Structure Title', label: 'Structure Title' },
-      { key: 'Exp. Method', label: 'Experimental method' },
+      { key: 'Exp_Method', label: 'Experimental method' },
       { key: 'Disease', label: 'Disease' },
     ]
 
