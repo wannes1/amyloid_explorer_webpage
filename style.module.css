@@ -280,6 +280,7 @@
 .graphLegend :global([class*='name']),
 .graphLegend :global([class*='show-more']) {
   color: var(--squidInk) !important;
+  opacity: 1 !important;
 }
 
 .searchInput {

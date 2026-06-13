@@ -259,6 +259,7 @@
 .style_graphLegend [class*=name],
 .style_graphLegend [class*=show-more] {
   color: var(--squidInk) !important;
+  opacity: 1 !important;
 }
 .style_searchInput {
   width: 100%;
